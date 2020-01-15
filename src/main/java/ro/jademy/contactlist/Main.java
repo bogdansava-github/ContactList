@@ -123,12 +123,14 @@ public class Main {
         ageCount = (int) userList.stream().filter(user -> (user.getAge() >= 20 && user.getAge() <= 30)).count();
         System.out.println(ageCount + " of your contacts have ages between 20 and 30");
 
-        int minAge = userList.stream().mapToInt(user -> user.getAge()).min().orElseThrow(NoSuchElementException::new);
-        System.out.println("Youngest contact is " + minAge + " years old");
-
         IntSummaryStatistics statistics = userList.stream()
                 .mapToInt(User::getAge)
                 .summaryStatistics();
+
+        int minAge = statistics.getMin();
+        int maxAge = statistics.getMax();
+        System.out.println("Youngest contact is " + minAge + " years old, the eldest one is "+maxAge);
+
         double averageAge = statistics.getAverage();
         System.out.println("The average age of your contact list is: " + averageAge + " years");
     }
