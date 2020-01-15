@@ -118,18 +118,21 @@ public class User implements Comparable<User> {
                 ", isFavorite=" + isFavorite +
                 '}';
     }
-    public void printUserDetails(User user){
-        System.out.println("\n"+user.getFirstName() +" "+ user.getLastName());
-        System.out.println(user.getJobTitle());
-        System.out.println(user.getCompany().getName());
-        System.out.println("home phone: " + user.phoneNumbers.get("home"));
-        System.out.println("mobile phone: "+user.phoneNumbers.get("mobile"));
-        System.out.println("work phone: "+user.phoneNumbers.get("work"));
-        System.out.println("email: "+user.email);
-        System.out.println("home address: "+user.address);
-        System.out.println("work address: "+user.company.getAddress());
+
+
+    public void printUserDetails(User user) {
+        System.out.println("\n" + firstName + " " + lastName);
+        System.out.println(jobTitle);
+        System.out.println(company.getName());
+        System.out.println("home phone: " + phoneNumbers.get("home"));
+        System.out.println("mobile phone: " + phoneNumbers.get("mobile"));
+        System.out.println("work phone: " + phoneNumbers.get("work"));
+        System.out.println("email: " + email);
+        System.out.println("home address: " + address);
+        System.out.println("work address: " + company.getAddress());
 
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -149,10 +152,10 @@ public class User implements Comparable<User> {
 
     @Override
     public int compareTo(User o) {
-        if (lastName.compareTo(o.lastName)==0){
+        if (lastName.compareTo(o.lastName) == 0) {
             return firstName.compareTo(o.firstName);
         }
         return lastName.compareTo(o.lastName);
 
-        }
+    }
 }
