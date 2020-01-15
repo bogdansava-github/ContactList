@@ -117,7 +117,7 @@ public class Main {
 
         int abroadContactsCount;
         abroadContactsCount = (int) userList.stream().filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40"))).count();
-        System.out.println(abroadContactsCount+" has mobile phone registered abroad");
+        System.out.println(abroadContactsCount + " has mobile phone registered abroad");
 
         int ageCount;
         ageCount = (int) userList.stream().filter(user -> (user.getAge() >= 20 && user.getAge() <= 30)).count();
@@ -125,6 +125,12 @@ public class Main {
 
         int minAge = userList.stream().mapToInt(user -> user.getAge()).min().orElseThrow(NoSuchElementException::new);
         System.out.println("Youngest contact is " + minAge + " years old");
+
+        IntSummaryStatistics statistics = userList.stream()
+                .mapToInt(User::getAge)
+                .summaryStatistics();
+        double averageAge = statistics.getAverage();
+        System.out.println("The average age of your contact list is: " + averageAge + " years");
     }
 }
 
