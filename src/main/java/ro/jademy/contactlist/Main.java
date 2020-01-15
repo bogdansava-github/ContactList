@@ -87,23 +87,33 @@ public class Main {
         // list contact list in natural order
         System.out.println("\n********************* Contact list in natural last name order ****************************");
 
-        userList.stream().sorted().forEach(user -> user.printUserDetails(user));
+        userList.stream()
+                .sorted()
+                .forEach(user -> user.printUserDetails(user));
 
         // list contact list by a given criteria
 
         System.out.println("\n************************ List contacts by company name ***********************************");
-        userList.stream().sorted(Comparator.comparing(user -> user.getCompany().getName())).forEach(user -> user.printUserDetails(user));
+        userList.stream()
+                .sorted(Comparator.comparing(user -> user.getCompany().getName()))
+                .forEach(user -> user.printUserDetails(user));
 
         // display a favorites list
 
         System.out.println("\n*************************** Display favorites list ***************************************");
-        userList.stream().filter(User::isFavorite).sorted().forEach(user -> user.printUserDetails(user));
+        userList.stream()
+                .filter(User::isFavorite)
+                .sorted()
+                .forEach(user -> user.printUserDetails(user));
 
         // search by a given or multiple criteria
         System.out.println("\n************************* Search by a given criteria *************************************");
         String criteria = "sav";
         System.out.println("The search string is: " + criteria);
-        userList.stream().filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())).sorted().forEach(user -> user.printUserDetails(user));
+        userList.stream()
+                .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase()))
+                .sorted()
+                .forEach(user -> user.printUserDetails(user));
 
 
         // display some statistics for the contact list
@@ -112,15 +122,21 @@ public class Main {
         System.out.println("You have " + userList.size() + " contacts\n");
 
         int localContactsCount;
-        localContactsCount = (int) userList.stream().filter(user -> user.getAddress().getCity().equals("Bucharest")).count();
+        localContactsCount = (int) userList.stream()
+                .filter(user -> user.getAddress().getCity().equals("Bucharest"))
+                .count();
         System.out.println(localContactsCount + " of your contacts are from Bucharest");
 
         int abroadContactsCount;
-        abroadContactsCount = (int) userList.stream().filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40"))).count();
+        abroadContactsCount = (int) userList.stream()
+                .filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40")))
+                .count();
         System.out.println(abroadContactsCount + " has mobile phone registered abroad");
 
         int ageCount;
-        ageCount = (int) userList.stream().filter(user -> (user.getAge() >= 20 && user.getAge() <= 30)).count();
+        ageCount = (int) userList.stream()
+                .filter(user -> (user.getAge() >= 20 && user.getAge() <= 30))
+                .count();
         System.out.println(ageCount + " of your contacts have ages between 20 and 30");
 
         IntSummaryStatistics statistics = userList.stream()
