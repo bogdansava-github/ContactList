@@ -106,18 +106,19 @@ public class Main {
 
 
         // display some statistics for the contact list
-        System.out.println("\n********************* Statistics *******************************");
+        System.out.println("\n********************* Statistics *******************************\n");
         System.out.println("You have " + userList.size() + " contacts");
+
         int localContactsCount;
         localContactsCount = (int) userList.stream().filter(user -> user.getAddress().getCity().equals("Bucharest")).count();
         System.out.println(localContactsCount + " are from Bucharest");
 
         int ageCount;
         ageCount = (int) userList.stream().filter(user -> (user.getAge() >= 20 && user.getAge() <= 30)).count();
-        System.out.println(ageCount + " of your contacts have age 20-30");
+        System.out.println(ageCount + " of your contacts have ages 20-30");
 
-        int minAge=userList.stream().mapToInt(user -> user.getAge()).min().orElseThrow(NoSuchElementException::new);
-        System.out.println("Youngest contact is "+minAge+" years old");
+        int minAge = userList.stream().mapToInt(user -> user.getAge()).min().orElseThrow(NoSuchElementException::new);
+        System.out.println("Youngest contact is " + minAge + " years old");
     }
 }
 
