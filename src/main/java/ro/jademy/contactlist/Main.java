@@ -61,12 +61,12 @@ public class Main {
 
         Map<String, PhoneNumber> phoneNumbersUser5 = new HashMap<>();
         phoneNumbersUser5.put("work", new PhoneNumber("+40", "147852369"));
-        phoneNumbersUser5.put("mobile", new PhoneNumber("+40", "987456321"));
+        phoneNumbersUser5.put("mobile", new PhoneNumber("+1", "987456321"));
         phoneNumbersUser5.put("home", new PhoneNumber("+40", "123654789"));
         Address addressUser5 = new Address("Calea Vacaresti", 80, 3, "1",
-                "066554", "Bucharest", "Romania");
-        Address companyAddressUser5 = new Address("Theodor Pallady", 112, null,
-                null, "032323", "Bucharest", "Romania");
+                "066554", "NY", "US");
+        Address companyAddressUser5 = new Address("Theodor Pallady", 112, 45,
+                "4", "032323", "NY", "US");
         Company companyUser5 = new Company("Vodafone", companyAddressUser5);
 
 
@@ -85,33 +85,43 @@ public class Main {
         //userList.forEach(user -> user.printUserDetails(user));
 
         // list contact list in natural order
-        System.out.println("\n***************** Contact list in natural last name order ****************************");
+        System.out.println("\n********************* Contact list in natural last name order ****************************");
 
         userList.stream().sorted().forEach(user -> user.printUserDetails(user));
 
         // list contact list by a given criteria
 
-        System.out.println("\n********************* List contacts by company name *******************************");
+        System.out.println("\n************************ List contacts by company name ***********************************");
         userList.stream().sorted(Comparator.comparing(user -> user.getCompany().getName())).forEach(user -> user.printUserDetails(user));
 
         // display a favorites list
 
-        System.out.println("\n********************* Display favorites list *******************************");
+        System.out.println("\n*************************** Display favorites list ***************************************");
         userList.stream().filter(User::isFavorite).sorted().forEach(user -> user.printUserDetails(user));
 
         // search by a given or multiple criteria
-        System.out.println("\n********************* Search by a given criteria *******************************");
+        System.out.println("\n************************* Search by a given criteria *************************************");
         String criteria = "sav";
+        System.out.println("The search string is: " + criteria);
         userList.stream().filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())).sorted().forEach(user -> user.printUserDetails(user));
 
 
         // display some statistics for the contact list
+
         System.out.println("\n********************* Statistics *******************************\n");
         System.out.println("You have " + userList.size() + " contacts");
+
+
+        System.out.println("\n********************************** Statistics ********************************************");
+        System.out.println("You have " + userList.size() + " contacts\n");
 
         int localContactsCount;
         localContactsCount = (int) userList.stream().filter(user -> user.getAddress().getCity().equals("Bucharest")).count();
         System.out.println(localContactsCount + " are from Bucharest");
+
+        int abroadContactsCount;
+        abroadContactsCount = (int) userList.stream().filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40"))).count();
+        System.out.println(abroadContactsCount+" has mobile phone registered abroad");
 
         int ageCount;
         ageCount = (int) userList.stream().filter(user -> (user.getAge() >= 20 && user.getAge() <= 30)).count();
