@@ -2,8 +2,9 @@ package ro.jademy.contactlist.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-public class User {
+public class User implements Comparable<User> {
 
     private String firstName;
     private String lastName;
@@ -117,4 +118,41 @@ public class User {
                 ", isFavorite=" + isFavorite +
                 '}';
     }
+    public void printUserDetails(User user){
+        System.out.println("\n"+user.getFirstName() +" "+ user.getLastName());
+        System.out.println(user.getJobTitle());
+        System.out.println(user.getCompany().getName());
+        System.out.println("home phone: " + user.phoneNumbers.get("home"));
+        System.out.println("mobile phone: "+user.phoneNumbers.get("mobile"));
+        System.out.println("work phone: "+user.phoneNumbers.get("work"));
+        System.out.println("email: "+user.email);
+        System.out.println("home address: "+user.address);
+        System.out.println("work address: "+user.company.getAddress());
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return firstName.equals(user.firstName) &&
+                lastName.equals(user.lastName) &&
+                age.equals(user.age) &&
+                company.equals(user.company);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, age, company);
+    }
+
+    @Override
+    public int compareTo(User o) {
+        if (lastName.compareTo(o.lastName)==0){
+            return firstName.compareTo(o.firstName);
+        }
+        return lastName.compareTo(o.lastName);
+
+        }
 }

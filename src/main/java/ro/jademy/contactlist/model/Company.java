@@ -33,4 +33,13 @@ public class Company {
                 ", address=" + address +
                 '}';
     }
+
+ /*   @Override
+    public int compareTo(Company company) {
+        if (name.compareTo(company.getName())==0){
+            return
+        }
+
+        name.compareTo(company.getName());
+    }*/
 }

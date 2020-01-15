@@ -28,9 +28,6 @@ public class PhoneNumber {
 
     @Override
     public String toString() {
-        return "PhoneNumber{" +
-                "countryCode='" + countryCode + '\'' +
-                ", number='" + number + '\'' +
-                '}';
+        return countryCode + " " + number;
     }
 }
