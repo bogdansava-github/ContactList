@@ -3,6 +3,7 @@ package ro.jademy.contactlist;
 import ro.jademy.contactlist.model.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -87,16 +88,37 @@ public class Main {
         // list contact list in natural order
         System.out.println("\n********************* Contact list in natural last name order ****************************");
 
+        Map<Character, List<User>> result = userList.stream().sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
+                .collect(Collectors.groupingBy(
+                        user -> user.getLastName().charAt(0),
+                        TreeMap::new,
+                        Collectors.toList()));
+        Map<Integer, User>listUserFromMap = new HashMap<>();
+        int index = 1;
+        for (Map.Entry<Character, List<User>> listEntry : result.entrySet()) {
+            System.out.println(listEntry.getKey());
+
+            for (User user : listEntry.getValue()) {
+                System.out.println(index + ". " + user.getLastName() + ", " + user.getFirstName());
+                // add to map with index
+                listUserFromMap.put(index++, user);
+            }
+            System.out.println("============= "+listEntry.getValue().size()+" contacts");
+        }
+
+
+
+
         userList.stream()
                 .sorted()
-                .forEach(user -> user.printUserDetails(user));
+                .forEach(user -> user.printUserDetails());
 
         // list contact list by a given criteria
 
         System.out.println("\n************************ List contacts by company name ***********************************");
         userList.stream()
                 .sorted(Comparator.comparing(user -> user.getCompany().getName()))
-                .forEach(user -> user.printUserDetails(user));
+                .forEach(user -> user.printUserDetails());
 
         // display a favorites list
 
@@ -104,7 +126,7 @@ public class Main {
         userList.stream()
                 .filter(User::isFavorite)
                 .sorted()
-                .forEach(user -> user.printUserDetails(user));
+                .forEach(user -> user.printUserDetails());
 
         // search by a given or multiple criteria
         System.out.println("\n************************* Search by a given criteria *************************************");
@@ -113,7 +135,7 @@ public class Main {
         userList.stream()
                 .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase()))
                 .sorted()
-                .forEach(user -> user.printUserDetails(user));
+                .forEach(user -> user.printUserDetails());
 
 
         // display some statistics for the contact list
@@ -145,7 +167,7 @@ public class Main {
 
         int minAge = statistics.getMin();
         int maxAge = statistics.getMax();
-        System.out.println("Youngest contact is " + minAge + " years old, the eldest one is "+maxAge);
+        System.out.println("Youngest contact is " + minAge + " years old, the eldest one is " + maxAge);
 
         double averageAge = statistics.getAverage();
         System.out.println("The average age of your contact list is: " + averageAge + " years");

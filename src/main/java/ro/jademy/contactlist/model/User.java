@@ -120,7 +120,7 @@ public class User implements Comparable<User> {
     }
 
 
-    public void printUserDetails(User user) {
+    public void printUserDetails() {
         System.out.println("\n" + firstName + " " + lastName);
         System.out.println(jobTitle);
         System.out.println(company.getName());
