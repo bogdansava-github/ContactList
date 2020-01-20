@@ -106,17 +106,15 @@ public class User implements Comparable<User> {
 
     @Override
     public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", age=" + age +
-                ", phoneNumbers=" + phoneNumbers +
-                ", address=" + address +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", company=" + company +
-                ", isFavorite=" + isFavorite +
-                '}';
+        return "\n" + firstName + " " + lastName
+                +"\n"+(jobTitle == null ?"-":jobTitle)
+                +"\n"+(company.getName()==null?"-":company.getName())
+                +"\n\nhome phone: " + phoneNumbers.get("home")
+                +"\nmobile phone: " + phoneNumbers.get("mobile")
+                +"\nwork phone: " + phoneNumbers.get("work")
+                +"\nemail: " + email
+                +"\nhome address: " + address
+                +"\nwork address: " + company.getAddress();
     }
 
 
@@ -124,7 +122,7 @@ public class User implements Comparable<User> {
         System.out.println("\n" + firstName + " " + lastName);
         System.out.println(jobTitle);
         System.out.println(company.getName());
-        System.out.println("home phone: " + phoneNumbers.get("home"));
+        System.out.println("\nhome phone: " + phoneNumbers.get("home"));
         System.out.println("mobile phone: " + phoneNumbers.get("mobile"));
         System.out.println("work phone: " + phoneNumbers.get("work"));
         System.out.println("email: " + email);
