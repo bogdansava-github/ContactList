@@ -156,6 +156,5 @@ public class User implements Comparable<User> {
             return firstName.compareTo(o.firstName);
         }
         return lastName.compareTo(o.lastName);
-
     }
 }
