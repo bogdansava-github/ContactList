@@ -2,148 +2,103 @@ package ro.jademy.contactlist;
 
 import ro.jademy.contactlist.model.*;
 
+import java.sql.SQLOutput;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // create a contact list of users
-        List<User> userList = new ArrayList<>();
-        //user1
-        Map<String, PhoneNumber> phoneNumbersUser1 = new HashMap<>();
-        phoneNumbersUser1.put("work", new PhoneNumber("+40", "6556565656"));
-        phoneNumbersUser1.put("mobile", new PhoneNumber("+40", "123332222"));
-        phoneNumbersUser1.put("home", new PhoneNumber("+40", "111000111"));
-        Address addressUser1 = new Address("Gura Putnei", 128, 1, null,
-                "030623", "Bucharest", "Romania");
-        Address companyAddressUser1 = new Address("Liviu Rebreanu", 23, null,
-                null, "034334", "Bucharest", "Romania");
-        Company companyUser1 = new Company("Active Consulting", companyAddressUser1);
-
-        //user2
-
-        Map<String, PhoneNumber> phoneNumbersUser2 = new HashMap<>();
-        phoneNumbersUser2.put("work", new PhoneNumber("+40", "999666888"));
-        phoneNumbersUser2.put("mobile", new PhoneNumber("+40", "321321321"));
-        phoneNumbersUser2.put("home", new PhoneNumber("+40", "898998999"));
-        Address addressUser2 = new Address("Magheru", 20, 5, "2",
-                "045567", "Bucharest", "Romania");
-        Address companyAddressUser2 = new Address("Ion Mihalache", 12, 7,
-                "1", "077898", "Bucharest", "Romania");
-        Company companyUser2 = new Company("Millennium", companyAddressUser2);
-
-        //user3
-
-        Map<String, PhoneNumber> phoneNumbersUser3 = new HashMap<>();
-        phoneNumbersUser3.put("work", new PhoneNumber("+40", "444555666"));
-        phoneNumbersUser3.put("mobile", new PhoneNumber("+40", "999888777"));
-        phoneNumbersUser3.put("home", new PhoneNumber("+40", "123456789"));
-        Address addressUser3 = new Address("Iancu de Hunedoara", 8, 10, "4",
-                "012325", "Brasov", "Romania");
-        Address companyAddressUser3 = new Address("Camil Ressu", 120, 25,
-                "10", "011144", "Bucharest", "Romania");
-        Company companyUser3 = new Company("Auto Bavaria", companyAddressUser3);
-
-        //user4
-
-        Map<String, PhoneNumber> phoneNumbersUser4 = new HashMap<>();
-        phoneNumbersUser4.put("work", new PhoneNumber("+40", "656544556"));
-        phoneNumbersUser4.put("mobile", new PhoneNumber("+40", "999888777"));
-        phoneNumbersUser4.put("home", new PhoneNumber("+40", "369852147"));
-        Address addressUser4 = new Address("Calea Floreasca", 240, 18, "5",
-                "033665", "Bucharest", "Romania");
-        Address companyAddressUser4 = new Address("Bd. Bratianu", 8, 6,
-                "2", "066554", "Bucharest", "Romania");
-        Company companyUser4 = new Company("Porsche Romania", companyAddressUser4);
-
-        //user5
-
-        Map<String, PhoneNumber> phoneNumbersUser5 = new HashMap<>();
-        phoneNumbersUser5.put("work", new PhoneNumber("+40", "147852369"));
-        phoneNumbersUser5.put("mobile", new PhoneNumber("+1", "987456321"));
-        phoneNumbersUser5.put("home", new PhoneNumber("+40", "123654789"));
-        Address addressUser5 = new Address("Calea Vacaresti", 80, 3, "1",
-                "066554", "NY", "US");
-        Address companyAddressUser5 = new Address("Theodor Pallady", 112, 45,
-                "4", "032323", "NY", "US");
-        Company companyUser5 = new Company("Vodafone", companyAddressUser5);
+        //create userlist
+        ArrayList<User> userList = UserListFactory.createUserList();
 
 
-        //userlist
-        userList.add(new User("Bogdan", "Sala", "bogdan.sava@yahoo.ro", 44, phoneNumbersUser1,
-                addressUser1, "CEO", companyUser1, true));
-        userList.add(new User("Gigel", "Popescu", "gigel.popescu@me.com", 30, phoneNumbersUser2,
-                addressUser2, "Sales Manager", companyUser2, false));
-        userList.add(new User("Gina", "Alexandrescu", "ana.aremere@yahoo.com", 22, phoneNumbersUser3,
-                addressUser3, "Assistant Manager", companyUser3, true));
-        userList.add(new User("Cecil", "Pasqual", "alina.pasqual@gmail.com", 28, phoneNumbersUser4,
-                addressUser4, "Marketing Manager", companyUser4, true));
-        userList.add(new User("Brad", "Pitt", "brad.pitt@me.com", 50, phoneNumbersUser5,
-                addressUser5, "General Manager", companyUser5, false));
-
-        //userList.forEach(user -> user.printUserDetails(user));
-
-        // list contact list in natural order
-        System.out.println("\n********************* Contact list in natural last name order ****************************");
-
-        Map<Character, List<User>> result = userList.stream().sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
-                .collect(Collectors.groupingBy(
-                        user -> user.getLastName().charAt(0),
-                        TreeMap::new,
-                        Collectors.toList()));
-        Map<Integer, User> listUserFromMap = new HashMap<>();
-        int index = 1;
-        for (Map.Entry<Character, List<User>> listEntry : result.entrySet()) {
-            System.out.println("         "+listEntry.getKey());
-
-            for (User user : listEntry.getValue()) {
-                System.out.println(index + ". " + user.getLastName() + ", " + user.getFirstName());
-                // add to map with index
-                listUserFromMap.put(index++, user);
-            }
-            System.out.println("================== " + listEntry.getValue().size() + " contacts");
-        }
-        System.out.println("Total number of contacts: " + listUserFromMap.size());
-
+        //grouping userlist by first lastname character in a map
+        Map<Character, List<User>> result = User.makeUserMap(userList);
+        //menu
+        System.out.println("\nContact List");
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Please choose a contact index: ");
-        int contactIndex = scanner.nextInt();
-        System.out.println(listUserFromMap.get(contactIndex));
+        scanner.useDelimiter("\\n");
+        boolean menuExit = false;
+
+        while (!menuExit) {
+            ContactListMenu.printMenu();
+            System.out.print("Please choose an option: ");
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.println();
+            switch (option) {
+
+                case 1: //List all contacts in natural order
+
+                    User.printUserMap(result, userList.size());
+                    break;
+
+                case 2: //List user details
+
+                    ContactListDetails.printContactDetails(userList);
+                    break;
+
+                case 3: //List favorites
+
+                    ArrayList<User> favUserList = userList.stream().filter(User::isFavorite).collect(Collectors.toCollection(ArrayList::new));
+                    Map<Character, List<User>> result1 = User.makeUserMap(favUserList);
+                    User.printUserMap(result1, favUserList.size());
+                    break;
+
+                case 4: //search contacts
+                    System.out.print("Please input search string: ");
+                    String criteria = scanner.next();
+                    userList.stream()
+                            .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())
+                                    || user.getFirstName().toLowerCase().contains((criteria.toLowerCase()))
+                                    || user.getCompany().getName().toLowerCase().contains((criteria.toLowerCase()))
+                                    || user.getJobTitle().toLowerCase().contains((criteria.toLowerCase())))
+                            .sorted()
+                            .forEach(System.out::println);
+
+                    break;
+
+                case 5: //add new contact
+                    IntSummaryStatistics statistics = userList.stream()
+                            .mapToInt(User::getId)
+                            .summaryStatistics();
+                    int id = statistics.getMax() + 1;
 
 
+                    User newUser = UserListFactory.createNewUser(id);
+                    userList.add(newUser);
+                    result = User.makeUserMap(userList);
+
+                    break;
+
+                case 6: //edit contact
+
+                    break;
+
+                case 7: //remove contact
+
+                    break;
+
+                case 8: //statistics
+
+                    break;
+
+                case 9:
+                    System.exit(0);
+                    break;
+
+                default:
+
+                    System.out.print("Please choose a valid option (1-9): ");
+                    option = scanner.nextInt();
+            }
 
 
-
-
-       /* userList.stream()
-                .sorted()
-                .forEach(user -> user.printUserDetails());*/
-
-        // list contact list by a given criteria
-
-        /*System.out.println("\n************************ List contacts by company name ***********************************");
-        userList.stream()
-                .sorted(Comparator.comparing(user -> user.getCompany().getName()))
-                .forEach(user -> user.printUserDetails());
-
-        // display a favorites list
-
-        System.out.println("\n*************************** Display favorites list ***************************************");
-        userList.stream()
-                .filter(User::isFavorite)
-                .sorted()
-                .forEach(user -> user.printUserDetails());*/
-
-        // search by a given or multiple criteria
-        /*System.out.println("\n************************* Search by a given criteria *************************************");
-        String criteria = "sav";
-        System.out.println("The search string is: " + criteria);
-        userList.stream()
-                .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase()))
-                .sorted()
-                .forEach(user -> user.printUserDetails());*/
+        }
 
 
         // display some statistics for the contact list
@@ -181,4 +136,5 @@ public class Main {
         System.out.println("The average age of your contact list is: " + averageAge + " years");*/
     }
 }
+
 
