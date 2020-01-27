@@ -2,24 +2,23 @@ package ro.jademy.contactlist;
 
 import ro.jademy.contactlist.model.*;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Main {
-
+    public static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
 
         //create userlist
-        ArrayList<User> userList = UserListFactory.createUserList();
+        ArrayList<User> userList = UserFactory.createUserList();
 
 
         //grouping userlist by first lastname character in a map
         Map<Character, List<User>> result = User.makeUserMap(userList);
         //menu
         System.out.println("\nContact List");
-        Scanner scanner = new Scanner(System.in);
+
         scanner.useDelimiter("\\n");
         boolean menuExit = false;
 
@@ -69,7 +68,7 @@ public class Main {
                     int id = statistics.getMax() + 1;
 
 
-                    User newUser = UserListFactory.createNewUser(id);
+                    User newUser = UserFactory.createNewUser(id);
                     userList.add(newUser);
                     result = User.makeUserMap(userList);
 

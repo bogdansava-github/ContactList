@@ -1,8 +1,10 @@
 package ro.jademy.contactlist.model;
 
+import ro.jademy.contactlist.Main;
+
 import java.util.*;
 
-public class UserListFactory {
+public class UserFactory {
 
 
     public static ArrayList<User> createUserList() {
@@ -83,38 +85,38 @@ public class UserListFactory {
     }
 
     public static User createNewUser(int id) {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.print("Input first name: ");
-        String fName = scanner.nextLine();
+        String fName = Main.scanner.nextLine();
 
         System.out.print("Input last name: ");
-        String lName = scanner.nextLine();
+        String lName = Main.scanner.nextLine();
 
         System.out.print("Input job title: ");
-        String jobTitle = scanner.nextLine();
+        String jobTitle = Main.scanner.nextLine();
         //scanner.next();
 
         System.out.print("Input company name: ");
-        String companyName = scanner.nextLine();
+        String companyName = Main.scanner.nextLine();
         //scanner.next();
 
         System.out.println("Input the work phone number");
         System.out.print("Country Prefix: ");
-        String workPhonePrefix = scanner.nextLine();
+        String workPhonePrefix = Main.scanner.nextLine();
         System.out.print("Work phone number: ");
-        String workPhoneNumber = scanner.nextLine();
+        String workPhoneNumber = Main.scanner.nextLine();
 
         System.out.println("Input the mobile phone number");
         System.out.print("Country Prefix: ");
-        String mobilePhonePrefix = scanner.nextLine();
+        String mobilePhonePrefix = Main.scanner.nextLine();
         System.out.print("Mobile phone number: ");
-        String mobilePhoneNumber = scanner.nextLine();
+        String mobilePhoneNumber = Main.scanner.nextLine();
 
         System.out.println("Input the home phone number");
         System.out.print("Country Prefix: ");
-        String homePhonePrefix = scanner.nextLine();
+        String homePhonePrefix = Main.scanner.nextLine();
         System.out.print("Home phone number: ");
-        String homePhoneNumber = scanner.nextLine();
+        String homePhoneNumber = Main.scanner.nextLine();
 
         Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
         phoneNumbersNewUser.put("work", new PhoneNumber(workPhonePrefix, workPhoneNumber));
@@ -122,60 +124,60 @@ public class UserListFactory {
         phoneNumbersNewUser.put("home", new PhoneNumber(homePhonePrefix, homePhoneNumber));
 
         System.out.print("Input the e-mail: ");
-        String email = scanner.nextLine();
+        String email = Main.scanner.nextLine();
 
         System.out.println("Input the home address");
         System.out.print("Street name: ");
-        String streetNameHome = scanner.nextLine();
+        String streetNameHome = Main.scanner.nextLine();
 
         int x = 1;
-        int streetNrHome = 0;
+        int streetNrHome=0;
         do {
 
             try {
                 System.out.print("Street number: ");
-                streetNrHome = scanner.nextInt();
+                streetNrHome = Main.scanner.nextInt();
 
 
                 x = 2;
             } catch (InputMismatchException ex) {
                 System.out.println("Please input a number!!!");
-                scanner.nextLine();
+                Main.scanner.nextLine();
             }
 
         } while (x == 1);
-        scanner.nextLine();
+        Main.scanner.nextLine();
         x = 1;
         int aptNrHome = 0;
         do {
 
             try {
                 System.out.print("Apartment number: ");
-                aptNrHome = scanner.nextInt();
-                scanner.nextLine();
+                aptNrHome = Main.scanner.nextInt();
+                Main.scanner.nextLine();
 
                 x = 2;
             } catch (InputMismatchException ex) {
                 System.out.println("Please input a number!!!");
-                scanner.nextLine();
+                Main.scanner.nextLine();
             }
         } while (x == 1);
 
 
         System.out.print("Floor: ");
-        String floorHome = scanner.nextLine();
+        String floorHome = Main.scanner.nextLine();
         //  scanner.nextLine();
 
 
         System.out.print("ZipCode: ");
-        String zipCodeHome = scanner.nextLine();
+        String zipCodeHome = Main.scanner.nextLine();
 
         System.out.print("City: ");
-        String cityHome = scanner.nextLine();
+        String cityHome = Main.scanner.nextLine();
 
 
         System.out.print("Country: ");
-        String countryHome = scanner.nextLine();
+        String countryHome = Main.scanner.nextLine();
 
 
         Address homeAddress = new Address(streetNameHome, streetNrHome, aptNrHome, floorHome, zipCodeHome,
@@ -184,7 +186,7 @@ public class UserListFactory {
         System.out.println("Input the work address");
 
         System.out.print("Street name: ");
-        String streetNameWork = scanner.nextLine();
+        String streetNameWork = Main.scanner.nextLine();
 
         x = 1;
         int streetNrWork = 0;
@@ -192,13 +194,13 @@ public class UserListFactory {
 
             try {
                 System.out.print("Street number: ");
-                streetNrWork = scanner.nextInt();
+                streetNrWork = Main.scanner.nextInt();
 
 
                 x = 2;
             } catch (InputMismatchException ex) {
                 System.out.println("Please input a number!!!");
-                scanner.nextLine();
+                Main.scanner.nextLine();
             }
 
         } while (x == 1);
@@ -211,13 +213,13 @@ public class UserListFactory {
 
             try {
                 System.out.print("Apartment number: ");
-                aptNrWork = scanner.nextInt();
-                scanner.nextLine();
+                aptNrWork = Main.scanner.nextInt();
+                Main.scanner.nextLine();
 
                 x = 2;
             } catch (InputMismatchException ex) {
                 System.out.println("Please input a number!!!");
-                scanner.nextLine();
+                Main.scanner.nextLine();
             }
 
         } while (x == 1);
@@ -225,17 +227,17 @@ public class UserListFactory {
 
 
         System.out.print("Floor: ");
-        String floorWork = scanner.nextLine();
+        String floorWork = Main.scanner.nextLine();
 
         System.out.print("ZipCode: ");
-        String zipCodeWork = scanner.nextLine();
+        String zipCodeWork = Main.scanner.nextLine();
 
         System.out.print("City: ");
-        String cityWork = scanner.nextLine();
+        String cityWork = Main.scanner.nextLine();
 
 
         System.out.print("Country: ");
-        String countryWork = scanner.nextLine();
+        String countryWork = Main.scanner.nextLine();
 
 
         Address workAddress = new Address(streetNameWork, streetNrWork, aptNrWork, floorWork, zipCodeWork, cityWork, countryWork);
@@ -248,20 +250,20 @@ public class UserListFactory {
 
             try {
                 System.out.print("Input age: ");
-                age = scanner.nextInt();
-                scanner.nextLine();
+                age = Main.scanner.nextInt();
+                Main.scanner.nextLine();
 
                 x = 2;
             } catch (InputMismatchException ex) {
                 System.out.println("Please input a number!!!");
-                scanner.nextLine();
+                Main.scanner.nextLine();
             }
 
         } while (x == 1);
 
 
         System.out.print("Add to favorite? (y/n): ");
-        String answer = scanner.next();
+        String answer = Main.scanner.next();
         boolean isFavorite = (answer.equals("y") || answer.equals("Y") ? true : false);
         User user = createContact(id, fName, lName, email, age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
         return user;
