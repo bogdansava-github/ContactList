@@ -1,6 +1,7 @@
 package ro.jademy.contactlist;
 
 import ro.jademy.contactlist.model.*;
+import ro.jademy.contactlist.service.FileUserService;
 
 import java.util.*;
 import java.util.List;
@@ -10,6 +11,12 @@ public class Main {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+  /*      Menu menu=new Menu(new FileUserService());
+        menu.showMenu();*/
+
+
+
 
         //create userlist
         ArrayList<User> userList = (ArrayList<User>) UserFactory.createUserListFromStrings(ContactsFileIO.readFile("contacts.csv"));
