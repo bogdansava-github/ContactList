@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         //create userlist
-        ArrayList<User> userList = (ArrayList<User>) UserFactory.createUserListFromStrings(ReadContactsFile.readFile("contacts.csv"));
+        ArrayList<User> userList = (ArrayList<User>) UserFactory.createUserListFromStrings(ContactsFileIO.readFile("contacts.csv"));
 
 
         //grouping userlist by first lastname character in a map
@@ -73,6 +73,7 @@ public class Main {
                     User newUser = UserFactory.createNewUser(id);
                     userList.add(newUser);
                     result = User.makeUserMap(userList);
+                    ContactsFileIO.writeUserListToFile(userList,"contacts.csv");
 
                     break;
 
