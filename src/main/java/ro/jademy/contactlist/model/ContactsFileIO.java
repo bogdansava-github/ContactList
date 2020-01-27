@@ -28,7 +28,7 @@ public static void writeUserListToFile(List<User>userList,String fileName){
            List<String>lines=new ArrayList<>();
 
             for (User user : userList) {
-                String line=String.valueOf(user.getId())+"|"+user.getFirstName()+"|"+user.getLastName()+"|"+
+                String line=String.valueOf(user.getId())+"|"+user.getFirstName()+"|"+user.getLastName()+"|"+user.getEmail()+"|"+
                         String.valueOf(user.getAge())+"|home_"+user.getPhoneNumbers().get("home").getCountryCode()+
                         "_"+user.getPhoneNumbers().get("home").getNumber()+",mobile_"+user.getPhoneNumbers().get("mobile").getCountryCode()+
                         "_"+user.getPhoneNumbers().get("mobile").getNumber()+",work_"+user.getPhoneNumbers().get("work").getCountryCode()+
