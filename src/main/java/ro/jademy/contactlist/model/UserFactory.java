@@ -83,6 +83,44 @@ public class UserFactory {
                 addressUser5, "", companyUser5, false));
         return (ArrayList<User>) userList;
     }
+    
+    public static List<User> createUserListFromStrings(List<String> lines){
+        List<User> userList = new ArrayList<>();
+        Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
+
+        for (String line : lines) {
+            String[]userProperties=line.split("\\|");
+
+                int id=Integer.parseInt(userProperties[0]);
+                String fName=userProperties[1];
+                String lName=userProperties[2];
+                String email=userProperties[3];
+                int age=Integer.parseInt(userProperties[4]);
+                String [] phones=userProperties[5].split("\\,");
+                    String [] homePhone = phones[0].split("\\_");
+                    String [] mobilePhone = phones[1].split("\\_");
+                    String [] workPhone = phones[2].split("\\_");
+                    phoneNumbersNewUser.put(homePhone[0],new PhoneNumber(homePhone[1],homePhone[2]));
+                    phoneNumbersNewUser.put(mobilePhone[0],new PhoneNumber(mobilePhone[1],mobilePhone[2]));
+                    phoneNumbersNewUser.put(workPhone[0],new PhoneNumber(workPhone[1],workPhone[2]));
+                String [] homeAdress=userProperties[6].split("\\,");
+                Address homeAdressNewUser=new Address(homeAdress[0], Integer.parseInt(homeAdress[1]),Integer.parseInt(homeAdress[2]),
+                        homeAdress[3],homeAdress[4],homeAdress[5],homeAdress[6]);
+                String title=userProperties[7];
+                String[]companyProperties=userProperties[8].split("\\_");
+                    String [] companyAddress=companyProperties[1].split("\\,");
+                    Address companyAddressNewUser=new Address(companyAddress[0], Integer.parseInt(companyAddress[1]),
+                            Integer.parseInt(companyAddress[2]),companyAddress[3],companyAddress[4],companyAddress[5],
+                            companyAddress[6]);
+                    String companyName=companyProperties[0];
+                    Company companyNewUser=new Company(companyName,companyAddressNewUser);
+                boolean isFav = Boolean.parseBoolean(userProperties[9]);
+            User user = createContact(id, fName, lName, email, age, phoneNumbersNewUser, homeAdressNewUser, title, companyNewUser, isFav);
+            userList.add(user);
+        }
+        
+        return userList;
+    }
 
     public static User createNewUser(int id) {
 

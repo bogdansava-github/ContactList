@@ -8,16 +8,18 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
 
         //create userlist
-        ArrayList<User> userList = UserFactory.createUserList();
+        ArrayList<User> userList = (ArrayList<User>) UserFactory.createUserListFromStrings(ReadContactsFile.readFile("contacts.csv"));
 
 
         //grouping userlist by first lastname character in a map
         Map<Character, List<User>> result = User.makeUserMap(userList);
         //menu
         System.out.println("\nContact List");
+        //ReadWriteContactsFile.readFile("contacts.csv");
 
         scanner.useDelimiter("\\n");
         boolean menuExit = false;
