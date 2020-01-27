@@ -26,7 +26,7 @@ public class ContactListDetails {
 
                     System.out.print("Input id: ");
                     int id=scanner.nextInt();
-                    userList.stream().filter(user -> user.getId() == id).forEach(user -> System.out.println(user));
+                    userList.stream().filter(user -> user.getId() == id).forEach(System.out::println);
 
                     break;
 
