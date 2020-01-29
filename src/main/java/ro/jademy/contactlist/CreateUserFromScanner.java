@@ -193,10 +193,12 @@ public class CreateUserFromScanner {
 
         } while (x == 1);
 
-
         System.out.print("Add to favorite? (y/n): ");
         String answer = Main.scanner.next();
         boolean isFavorite = (answer.equals("y") || answer.equals("Y") ? true : false);
+
+
+
 
         ArrayList<Object>userData=new ArrayList<>();
 
@@ -210,28 +212,21 @@ public class CreateUserFromScanner {
         userData.add(jobTitle);
         userData.add(company);
         userData.add(isFavorite);
-        //ArrayList<Object>userData=Arrays.asList(id, fName,lName, email,age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
-
-
-        //User user = createContact(id, fName, lName, email, age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
-        //return user;
+        /*ArrayList<Object>userData=Arrays.asList(id, fName,lName, email,age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
+        User user = createContact(id, fName, lName, email, age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
+        return user;*/
         return userData;
 
     }
 
+/*    public static User createContact(int id, String fName, String lName, String email, int age, Map<String,
+            PhoneNumber> phoneNumbers, Address homeAddress, String jobTitle, Company company, boolean isFav) throws InputMismatchException {
+    return new User(id, fName, lName, email, age, phoneNumbers, homeAddress, jobTitle, company, isFav);*/
 
-
-
-
-
-
-
-    //public static User createContact(int id, String fName, String lName, String email, int age, Map<String,
-     //       PhoneNumber> phoneNumbers, Address homeAddress, String jobTitle, Company company, boolean isFav) throws InputMismatchException {
     public static User createContact(ArrayList<Object>userData){
 
-        //return new User(id, fName, lName, email, age, phoneNumbers, homeAddress, jobTitle, company, isFav);
-        return new User((int)userData.get(0), (String) userData.get(1), (String) userData.get(2), (String) userData.get(3), (int)userData.get(4),
-                (Map<String, PhoneNumber>) userData.get(5), (Address) userData.get(6), (String) userData.get(7), (Company) userData.get(8), (boolean)userData.get(9));
+        return new User((int)userData.get(0), (String) userData.get(1), (String) userData.get(2), (String) userData.get(3),
+                (int)userData.get(4), (Map<String, PhoneNumber>) userData.get(5), (Address) userData.get(6),
+                (String) userData.get(7), (Company) userData.get(8), (boolean)userData.get(9));
     }
 }
