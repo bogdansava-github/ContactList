@@ -100,30 +100,30 @@ public class Menu {
                     break;
 
                 case 8: //statistics
-                    // display some statistics for the contact list
 
-        /*System.out.println("\n********************************** Statistics ********************************************");
-        System.out.println("You have " + userList.size() + " contacts\n");
+
+        System.out.println("\n********************************** Statistics ********************************************");
+        System.out.println("You have " + userService.getContacts().size() + " contacts\n");
 
         int localContactsCount;
-        localContactsCount = (int) userList.stream()
+        localContactsCount = (int) userService.getContacts().stream()
                 .filter(user -> user.getAddress().getCity().equals("Bucharest"))
                 .count();
         System.out.println(localContactsCount + " of your contacts are from Bucharest");
 
         int abroadContactsCount;
-        abroadContactsCount = (int) userList.stream()
+        abroadContactsCount = (int) userService.getContacts().stream()
                 .filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40")))
                 .count();
         System.out.println(abroadContactsCount + " has mobile phone registered abroad");
 
         int ageCount;
-        ageCount = (int) userList.stream()
+        ageCount = (int) userService.getContacts().stream()
                 .filter(user -> (user.getAge() >= 20 && user.getAge() <= 30))
                 .count();
         System.out.println(ageCount + " of your contacts have ages between 20 and 30");
 
-        IntSummaryStatistics statistics = userList.stream()
+        statistics = userService.getContacts().stream()
                 .mapToInt(User::getAge)
                 .summaryStatistics();
 
@@ -132,7 +132,7 @@ public class Menu {
         System.out.println("Youngest contact is " + minAge + " years old, the eldest one is " + maxAge);
 
         double averageAge = statistics.getAverage();
-        System.out.println("The average age of your contact list is: " + averageAge + " years");*/
+        System.out.println("The average age of your contact list is: " + averageAge + " years");
                     break;
 
                 case 9:
