@@ -87,6 +87,7 @@ public class FileUserService implements UserService {
         }
 
         // TODO: write changes to file
+        writeToFile();
     }
 
     @Override

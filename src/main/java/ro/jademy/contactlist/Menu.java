@@ -84,6 +84,18 @@ public class Menu {
                     break;
 
                 case 7: //remove contact
+                    System.out.print("Please input a user id you want to remove: ");
+                    userId = scanner.nextInt();
+                    try{
+                        userService.getContactById(userId).get();
+
+                        userService.removeContact(userId);
+                        System.out.println("Done!!!");
+
+                    }
+                    catch (NoSuchElementException ex){
+
+                        System.out.println("\nThis user id is not in your contact list\n");}
 
                     break;
 

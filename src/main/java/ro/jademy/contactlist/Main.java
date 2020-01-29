@@ -12,10 +12,6 @@ public class Main {
         Menu menu=new Menu(new FileUserService("contacts.csv"));
         menu.showMenu();
 
-
-
-
-
     }
 }
 
