@@ -65,6 +65,8 @@ public class Menu {
                     break;
 
                 case 6: //edit contact
+                    System.out.print("Please input a user id you want to edit: ");
+                    int userId = scanner.nextInt();
 
                     break;
 
@@ -144,7 +146,14 @@ public class Menu {
 
                     System.out.print("Input id: ");
                     int id = scanner.nextInt();
-                    contactList.stream().filter(user -> user.getUserId() == id).forEach(System.out::println);
+
+                    try{
+                        System.out.println(userService.getContactById(id).get());
+                    }
+                    catch (NoSuchElementException ex){
+
+                     System.out.println("\nThis user id is not in your contact list\n");}
+
 
                     break;
 

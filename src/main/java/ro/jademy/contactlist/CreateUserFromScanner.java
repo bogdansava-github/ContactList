@@ -68,39 +68,8 @@ public class CreateUserFromScanner {
                 streetNrHome = Main.scanner.nextInt();
 
 
-                x = 2; // display some statistics for the contact list
+                x = 2;
 
-        /*System.out.println("\n********************************** Statistics ********************************************");
-        System.out.println("You have " + userList.size() + " contacts\n");
-
-        int localContactsCount;
-        localContactsCount = (int) userList.stream()
-                .filter(user -> user.getAddress().getCity().equals("Bucharest"))
-                .count();
-        System.out.println(localContactsCount + " of your contacts are from Bucharest");
-
-        int abroadContactsCount;
-        abroadContactsCount = (int) userList.stream()
-                .filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40")))
-                .count();
-        System.out.println(abroadContactsCount + " has mobile phone registered abroad");
-
-        int ageCount;
-        ageCount = (int) userList.stream()
-                .filter(user -> (user.getAge() >= 20 && user.getAge() <= 30))
-                .count();
-        System.out.println(ageCount + " of your contacts have ages between 20 and 30");
-
-        IntSummaryStatistics statistics = userList.stream()
-                .mapToInt(User::getAge)
-                .summaryStatistics();
-
-        int minAge = statistics.getMin();
-        int maxAge = statistics.getMax();
-        System.out.println("Youngest contact is " + minAge + " years old, the eldest one is " + maxAge);
-
-        double averageAge = statistics.getAverage();
-        System.out.println("The average age of your contact list is: " + averageAge + " years");*/
             } catch (InputMismatchException ex) {
                 System.out.println("Please input a number!!!");
                 Main.scanner.nextLine();
@@ -225,6 +194,8 @@ public class CreateUserFromScanner {
         System.out.print("Add to favorite? (y/n): ");
         String answer = Main.scanner.next();
         boolean isFavorite = (answer.equals("y") || answer.equals("Y") ? true : false);
+
+
         User user = createContact(id, fName, lName, email, age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
         return user;
 

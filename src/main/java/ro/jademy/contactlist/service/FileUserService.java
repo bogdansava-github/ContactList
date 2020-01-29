@@ -50,13 +50,25 @@ public class FileUserService implements UserService {
 
     @Override
     public void editContact(int userId, String firstName, String lastName, String email, Integer age, Map<String, PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite) {
+
         Optional<User> userOpt = getContactById(userId);
 
         // edit the contact only if the user was found
         if (userOpt.isPresent()) {
-            User user = userOpt.get();
 
             // TODO: use setters and update the user
+            User user = userOpt.get();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setAge(age);
+            user.setPhoneNumbers(phoneNumbers);
+            user.setAddress(address);
+            user.setJobTitle(jobTitle);
+            user.setCompany(company);
+            user.setFavorite(isFavorite);
+
+
 
             // overwrite the whole list of contacts in the file
             writeToFile();
