@@ -58,6 +58,7 @@ public class FileUserService implements UserService {
 
             // TODO: use setters and update the user
             User user = userOpt.get();
+
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);

@@ -61,13 +61,26 @@ public class Menu {
                             .mapToInt(User::getUserId)
                             .summaryStatistics();
                     int id = statistics.getMax() + 1;
-                    userService.addContact(CreateUserFromScanner.createNewUser(id));
+                    userService.addContact(CreateUserFromScanner.createContact(CreateUserFromScanner.createNewUser(id)));
                     break;
 
                 case 6: //edit contact
                     System.out.print("Please input a user id you want to edit: ");
                     int userId = scanner.nextInt();
+                    try{
+                        userService.getContactById(userId).get();
 
+                        ArrayList<Object>userData=CreateUserFromScanner.createNewUser(userId);
+
+                        userService.editContact((int)userData.get(0), (String) userData.get(1), (String) userData.get(2),
+                                (String) userData.get(3), (int)userData.get(4), (Map<String, PhoneNumber>) userData.get(5),
+                                (Address) userData.get(6), (String) userData.get(7), (Company) userData.get(8),
+                                (boolean)userData.get(9));
+
+                    }
+                    catch (NoSuchElementException ex){
+
+                        System.out.println("\nThis user id is not in your contact list\n");}
                     break;
 
                 case 7: //remove contact
