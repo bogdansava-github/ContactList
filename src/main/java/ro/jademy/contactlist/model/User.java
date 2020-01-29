@@ -186,23 +186,5 @@ public class User implements Comparable<User> {
       return result;
     }
 
-    public static void printUserMap(Map<Character, List<User>>result, int listSize){
 
-        for (Map.Entry<Character, List<User>> listEntry : result.entrySet()) {
-            System.out.println("         " + listEntry.getKey());
-
-            for (User user : listEntry.getValue()) {
-                System.out.println(user.getId()
-                        + ". "
-                        + user.getLastName()
-                        + ", "
-                        + user.getFirstName()
-                        + ((user.isFavorite()) ? " *" : ""));
-
-            }
-            System.out.println("================== " + listEntry.getValue().size() + " contacts");
-        }
-        System.out.println("Total number of contacts: " + listSize);
-        System.out.println();
-    }
 }

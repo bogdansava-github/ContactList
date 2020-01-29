@@ -12,8 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-  /*      Menu menu=new Menu(new FileUserService());
-        menu.showMenu();*/
+        Menu menu=new Menu(new FileUserService("contacts.csv"));
+        menu.showMenu();
 
 
 
@@ -28,86 +28,8 @@ public class Main {
         System.out.println("\nContact List");
         //ReadWriteContactsFile.readFile("contacts.csv");
 
-        scanner.useDelimiter("\\n");
-        boolean menuExit = false;
-
-        while (!menuExit) {
-            ContactListMenu.printMenu();
-            System.out.print("Please choose an option: ");
-            int option = scanner.nextInt();
-            scanner.nextLine();
-
-            System.out.println();
-            switch (option) {
-
-                case 1: //List all contacts in natural order
-
-                    User.printUserMap(result, userList.size());
-                    break;
-
-                case 2: //List user details
-
-                    ContactListDetails.printContactDetails(userList);
-                    break;
-
-                case 3: //List favorites
-
-                    ArrayList<User> favUserList = userList.stream().filter(User::isFavorite).collect(Collectors.toCollection(ArrayList::new));
-                    Map<Character, List<User>> result1 = User.makeUserMap(favUserList);
-                    User.printUserMap(result1, favUserList.size());
-                    break;
-
-                case 4: //search contacts
-                    System.out.print("Please input search string: ");
-                    String criteria = scanner.next();
-                    userList.stream()
-                            .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())
-                                    || user.getFirstName().toLowerCase().contains((criteria.toLowerCase()))
-                                    || user.getCompany().getName().toLowerCase().contains((criteria.toLowerCase()))
-                                    || user.getJobTitle().toLowerCase().contains((criteria.toLowerCase())))
-                            .sorted()
-                            .forEach(System.out::println);
-
-                    break;
-
-                case 5: //add new contact
-                    IntSummaryStatistics statistics = userList.stream()
-                            .mapToInt(User::getId)
-                            .summaryStatistics();
-                    int id = statistics.getMax() + 1;
 
 
-                    User newUser = UserFactory.createNewUser(id);
-                    userList.add(newUser);
-                    result = User.makeUserMap(userList);
-                    ContactsFileIO.writeUserListToFile(userList,"contacts.csv");
-
-                    break;
-
-                case 6: //edit contact
-
-                    break;
-
-                case 7: //remove contact
-
-                    break;
-
-                case 8: //statistics
-
-                    break;
-
-                case 9:
-                    System.exit(0);
-                    break;
-
-                default:
-
-                    System.out.print("Please choose a valid option (1-9): ");
-                    option = scanner.nextInt();
-            }
-
-
-        }
 
 
         // display some statistics for the contact list
