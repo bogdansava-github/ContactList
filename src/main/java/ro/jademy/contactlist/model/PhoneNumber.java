@@ -1,38 +1,46 @@
 package ro.jademy.contactlist.model;
 
-public class PhoneNumber {
+public class PhoneNumber
+{
 
     private String countryCode; // ex: +40
     private String number; // ex: 740123456
 
-    public PhoneNumber(String countryCode, String number) {
+    public PhoneNumber(String countryCode, String number)
+    {
         this.countryCode = countryCode;
         this.number = number;
     }
 
-    public PhoneNumber(String number) {
+    public PhoneNumber(String number)
+    {
         this.countryCode = "+40"; // default country code
         this.number = number;
     }
 
-    public String getCountryCode() {
+    public String getCountryCode()
+    {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode)
+    {
         this.countryCode = countryCode;
     }
 
-    public String getNumber() {
+    public String getNumber()
+    {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(String number)
+    {
         this.number = number;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return countryCode + " " + number;
     }
 }

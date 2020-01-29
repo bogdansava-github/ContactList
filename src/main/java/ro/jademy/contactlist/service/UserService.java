@@ -32,5 +32,5 @@ public interface UserService {
 
     List<User> search(String query);
 
-    Map<Character, List<User>> makeUserMap(ArrayList<User>userList);
+    Map<Character, List<User>> makeUserMap(ArrayList<User> userList);
 }

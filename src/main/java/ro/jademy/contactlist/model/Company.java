@@ -1,37 +1,45 @@
 package ro.jademy.contactlist.model;
 
-public class Company {
+public class Company
+{
 
     private String name;
     private Address address;
 
-    public Company(String name){
-        this.name=name;
+    public Company(String name)
+    {
+        this.name = name;
     }
 
-    public Company(String name, Address address) {
+    public Company(String name, Address address)
+    {
         this.name = name;
         this.address = address;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Address getAddress() {
+    public Address getAddress()
+    {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Address address)
+    {
         this.address = address;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Company{" +
                 "name='" + name + '\'' +
                 ", address=" + address +

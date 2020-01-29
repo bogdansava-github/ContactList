@@ -13,8 +13,6 @@ import java.util.*;
 public class CreateUserFromScanner {
 
 
-
-    
     //public static User createNewUser(int id) {
     public static ArrayList<Object> createNewUser(int id) {
 
@@ -63,7 +61,7 @@ public class CreateUserFromScanner {
         String streetNameHome = Main.scanner.nextLine();
 
         int x = 1;
-        int streetNrHome=0;
+        int streetNrHome = 0;
         do {
 
             try {
@@ -138,7 +136,6 @@ public class CreateUserFromScanner {
         } while (x == 1);
 
 
-
         x = 1;
         int aptNrWork = 0;
         do {
@@ -155,7 +152,6 @@ public class CreateUserFromScanner {
             }
 
         } while (x == 1);
-
 
 
         System.out.print("Floor: ");
@@ -198,9 +194,7 @@ public class CreateUserFromScanner {
         boolean isFavorite = (answer.equals("y") || answer.equals("Y") ? true : false);
 
 
-
-
-        ArrayList<Object>userData=new ArrayList<>();
+        ArrayList<Object> userData = new ArrayList<>();
 
         userData.add(id);
         userData.add(fName);
@@ -223,10 +217,10 @@ public class CreateUserFromScanner {
             PhoneNumber> phoneNumbers, Address homeAddress, String jobTitle, Company company, boolean isFav) throws InputMismatchException {
     return new User(id, fName, lName, email, age, phoneNumbers, homeAddress, jobTitle, company, isFav);*/
 
-    public static User createContact(ArrayList<Object>userData){
+    public static User createContact(ArrayList<Object> userData) {
 
-        return new User((int)userData.get(0), (String) userData.get(1), (String) userData.get(2), (String) userData.get(3),
-                (int)userData.get(4), (Map<String, PhoneNumber>) userData.get(5), (Address) userData.get(6),
-                (String) userData.get(7), (Company) userData.get(8), (boolean)userData.get(9));
+        return new User((int) userData.get(0), (String) userData.get(1), (String) userData.get(2), (String) userData.get(3),
+                (int) userData.get(4), (Map<String, PhoneNumber>) userData.get(5), (Address) userData.get(6),
+                (String) userData.get(7), (Company) userData.get(8), (boolean) userData.get(9));
     }
 }

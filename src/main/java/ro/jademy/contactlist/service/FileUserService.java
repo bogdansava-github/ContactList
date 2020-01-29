@@ -9,24 +9,29 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FileUserService implements UserService {
+public class FileUserService implements UserService
+{
 
     private File contactsFile;
     private List<User> contacts = new ArrayList<>();
 
-    public FileUserService(File contactsFile) {
+    public FileUserService(File contactsFile)
+    {
         this.contactsFile = contactsFile;
     }
 
-    public FileUserService(String contactsFileName) {
+    public FileUserService(String contactsFileName)
+    {
         this(new File(contactsFileName));
     }
 
     @Override
-    public List<User> getContacts() {
+    public List<User> getContacts()
+    {
 
         // check if contacts is empty
-        if (contacts.isEmpty()) {
+        if (contacts.isEmpty())
+        {
             contacts.addAll(readFromFile());
         }
 
@@ -35,12 +40,14 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public Optional<User> getContactById(int userId) {
+    public Optional<User> getContactById(int userId)
+    {
         return contacts.stream().filter(u -> u.getUserId() == userId).findFirst();
     }
 
     @Override
-    public void addContact(User contact) {
+    public void addContact(User contact)
+    {
         // add user to contact list
         contacts.add(contact);
 
@@ -49,12 +56,15 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void editContact(int userId, String firstName, String lastName, String email, Integer age, Map<String, PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite) {
+    public void editContact(int userId, String firstName, String lastName, String email, Integer age, Map<String,
+            PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite)
+    {
 
         Optional<User> userOpt = getContactById(userId);
 
         // edit the contact only if the user was found
-        if (userOpt.isPresent()) {
+        if (userOpt.isPresent())
+        {
 
             // TODO: use setters and update the user
             User user = userOpt.get();
@@ -70,18 +80,19 @@ public class FileUserService implements UserService {
             user.setFavorite(isFavorite);
 
 
-
             // overwrite the whole list of contacts in the file
             writeToFile();
         }
     }
 
     @Override
-    public void removeContact(int userId) {
+    public void removeContact(int userId)
+    {
         Optional<User> userOpt = getContactById(userId);
 
         // remove the contact only if found
-        if (userOpt.isPresent()) {
+        if (userOpt.isPresent())
+        {
             User user = userOpt.get();
             contacts.remove(user);
         }
@@ -91,7 +102,8 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public List<User> search(String criteria) {
+    public List<User> search(String criteria)
+    {
 
         contacts.stream()
                 .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())
@@ -105,7 +117,8 @@ public class FileUserService implements UserService {
         return new ArrayList<>();
     }
 
-    private List<User> readFromFile() {
+    private List<User> readFromFile()
+    {
         // TODO: read user properties from file and create the user list
         // TODO: remember to check if the file exists first (create it if it does not)
 
@@ -113,18 +126,23 @@ public class FileUserService implements UserService {
         List<User> contactList = new ArrayList<>();
         Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
 
-        try (BufferedReader in = new BufferedReader(new FileReader(contactsFile))) {
+        try (BufferedReader in = new BufferedReader(new FileReader(contactsFile)))
+        {
             String line = null;
-            while ((line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null)
+            {
                 lines.add(line);
             }
 
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             System.out.println("File not found \n" + ex);
             ;
         }
 
-        for (String line : lines) {
+        for (String line : lines)
+        {
             String[] userProperties = line.split("\\|");
 
             int id = Integer.parseInt(userProperties[0]);
@@ -159,13 +177,16 @@ public class FileUserService implements UserService {
         return contactList;
     }
 
-    private void writeToFile() {
+    private void writeToFile()
+    {
         // TODO: implement method using the contacts and file properties
 
-        try (BufferedWriter out = new BufferedWriter(new FileWriter(contactsFile))) {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(contactsFile)))
+        {
             List<String> lines = new ArrayList<>();
 
-            for (User user : contacts) {
+            for (User user : contacts)
+            {
                 String line = user.getUserId() + "|" + user.getFirstName() + "|" + user.getLastName() + "|" + user.getEmail() + "|" +
                         user.getAge() + "|home_" + user.getPhoneNumbers().get("home").getCountryCode() + "_" +
                         user.getPhoneNumbers().get("home").getNumber() + ",mobile_" +
@@ -190,23 +211,27 @@ public class FileUserService implements UserService {
 
             }
 
-            for (String line : lines) {
+            for (String line : lines)
+            {
                 out.write(line);
                 out.newLine();
             }
 
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex)
+        {
             System.out.println("File not found " + contactsFile + "\n" + ex);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             System.out.println("Failed to write content to file " + contactsFile + "\n" + ex);
         }
 
 
-
-
     }
 
-    public Map<Character, List<User>> makeUserMap(ArrayList<User>userList) {
+    public Map<Character, List<User>> makeUserMap(ArrayList<User> userList)
+    {
         return userList.stream()
                 .sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
                 .collect(Collectors.groupingBy(user -> user.getLastName().charAt(0), TreeMap::new, Collectors.toList()));
