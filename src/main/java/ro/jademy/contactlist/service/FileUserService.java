@@ -5,11 +5,11 @@ import ro.jademy.contactlist.model.Company;
 import ro.jademy.contactlist.model.PhoneNumber;
 import ro.jademy.contactlist.model.User;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FileUserService implements UserService{
+public class FileUserService implements UserService {
 
     private File contactsFile;
     private List<User> contacts = new ArrayList<>();
@@ -36,7 +36,7 @@ public class FileUserService implements UserService{
 
     @Override
     public Optional<User> getContactById(int userId) {
-        return contacts.stream().filter(u -> u.getId() == userId).findFirst();
+        return contacts.stream().filter(u -> u.getUserId() == userId).findFirst();
     }
 
     @Override
@@ -77,9 +77,16 @@ public class FileUserService implements UserService{
     }
 
     @Override
-    public List<User> search(String query) {
+    public List<User> search(String criteria) {
 
-        // TODO: implement method
+        contacts.stream()
+                .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())
+                        || user.getFirstName().toLowerCase().contains((criteria.toLowerCase()))
+                        || user.getCompany().getName().toLowerCase().contains((criteria.toLowerCase()))
+                        || user.getJobTitle().toLowerCase().contains((criteria.toLowerCase())))
+                .sorted()
+                .forEach(System.out::println);
+
 
         return new ArrayList<>();
     }
@@ -88,15 +95,105 @@ public class FileUserService implements UserService{
         // TODO: read user properties from file and create the user list
         // TODO: remember to check if the file exists first (create it if it does not)
 
-        return new ArrayList<>();
+        List<String> lines = new ArrayList<>();
+        List<User> contactList = new ArrayList<>();
+        Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
+
+        try (BufferedReader in = new BufferedReader(new FileReader(contactsFile))) {
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                lines.add(line);
+            }
+
+        } catch (IOException ex) {
+            System.out.println("File not found \n" + ex);
+            ;
+        }
+
+        for (String line : lines) {
+            String[] userProperties = line.split("\\|");
+
+            int id = Integer.parseInt(userProperties[0]);
+            String fName = userProperties[1];
+            String lName = userProperties[2];
+            String email = userProperties[3];
+            int age = Integer.parseInt(userProperties[4]);
+            String[] phones = userProperties[5].split("\\,");
+            String[] homePhone = phones[0].split("\\_");
+            String[] mobilePhone = phones[1].split("\\_");
+            String[] workPhone = phones[2].split("\\_");
+            phoneNumbersNewUser.put(homePhone[0], new PhoneNumber(homePhone[1], homePhone[2]));
+            phoneNumbersNewUser.put(mobilePhone[0], new PhoneNumber(mobilePhone[1], mobilePhone[2]));
+            phoneNumbersNewUser.put(workPhone[0], new PhoneNumber(workPhone[1], workPhone[2]));
+            String[] homeAdress = userProperties[6].split("\\,");
+            Address homeAdressNewUser = new Address(homeAdress[0], Integer.parseInt(homeAdress[1]), Integer.parseInt(homeAdress[2]),
+                    homeAdress[3], homeAdress[4], homeAdress[5], homeAdress[6]);
+            String title = userProperties[7];
+            String[] companyProperties = userProperties[8].split("\\_");
+            String[] companyAddress = companyProperties[1].split("\\,");
+            Address companyAddressNewUser = new Address(companyAddress[0], Integer.parseInt(companyAddress[1]),
+                    Integer.parseInt(companyAddress[2]), companyAddress[3], companyAddress[4], companyAddress[5],
+                    companyAddress[6]);
+            String companyName = companyProperties[0];
+            Company companyNewUser = new Company(companyName, companyAddressNewUser);
+            boolean isFav = Boolean.parseBoolean(userProperties[9]);
+            User user = new User(id, fName, lName, email, age, phoneNumbersNewUser, homeAdressNewUser, title, companyNewUser, isFav);
+            contactList.add(user);
+        }
+
+
+        return contactList;
     }
 
     private void writeToFile() {
         // TODO: implement method using the contacts and file properties
+
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(contactsFile))) {
+            List<String> lines = new ArrayList<>();
+
+            for (User user : contacts) {
+                String line = user.getUserId() + "|" + user.getFirstName() + "|" + user.getLastName() + "|" + user.getEmail() + "|" +
+                        user.getAge() + "|home_" + user.getPhoneNumbers().get("home").getCountryCode() + "_" +
+                        user.getPhoneNumbers().get("home").getNumber() + ",mobile_" +
+                        user.getPhoneNumbers().get("mobile").getCountryCode() + "_" +
+                        user.getPhoneNumbers().get("mobile").getNumber() + ",work_" +
+                        user.getPhoneNumbers().get("work").getCountryCode() + "_" +
+                        user.getPhoneNumbers().get("work").getNumber() + "|" + user.getAddress().getStreetName() + "," +
+                        user.getAddress().getStreetNumber() + "," + user.getAddress().getApartmentNumber() + "," +
+                        user.getAddress().getFloor() + "," + user.getAddress().getZipCode() + "," +
+                        user.getAddress().getCity() + "," + user.getAddress().getCountry() + "|" +
+                        user.getJobTitle() + "|" + user.getCompany().getName() + "_" +
+                        user.getCompany().getAddress().getStreetName() + "," +
+                        user.getCompany().getAddress().getStreetNumber() + "," +
+                        user.getCompany().getAddress().getApartmentNumber() + "," +
+                        user.getCompany().getAddress().getFloor() + "," +
+                        user.getCompany().getAddress().getZipCode() + "," +
+                        user.getCompany().getAddress().getCity() + "," +
+                        user.getCompany().getAddress().getCountry() + "|" +
+                        user.isFavorite();
+
+                lines.add(line);
+
+            }
+
+            for (String line : lines) {
+                out.write(line);
+                out.newLine();
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found " + contactsFile + "\n" + ex);
+        } catch (IOException ex) {
+            System.out.println("Failed to write content to file " + contactsFile + "\n" + ex);
+        }
+
+
+
+
     }
 
-    public  Map<Character, List<User>> makeUserMap(){
-        return contacts.stream()
+    public Map<Character, List<User>> makeUserMap(ArrayList<User>userList) {
+        return userList.stream()
                 .sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
                 .collect(Collectors.groupingBy(user -> user.getLastName().charAt(0), TreeMap::new, Collectors.toList()));
     }

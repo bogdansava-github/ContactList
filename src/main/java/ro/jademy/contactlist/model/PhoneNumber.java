@@ -10,6 +10,11 @@ public class PhoneNumber {
         this.number = number;
     }
 
+    public PhoneNumber(String number) {
+        this.countryCode = "+40"; // default country code
+        this.number = number;
+    }
+
     public String getCountryCode() {
         return countryCode;
     }

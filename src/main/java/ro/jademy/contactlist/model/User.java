@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 
 public class User implements Comparable<User> {
 
-    private int id;
+    private static final String DEFAULT_PHONE_NUMBER_GROUP = "home";
+
+    private int userId;
     private String firstName;
     private String lastName;
     private String email;
@@ -20,8 +22,8 @@ public class User implements Comparable<User> {
     private boolean isFavorite;
 
 
-    public User(int id, String firstName, String lastName, String email, Integer age, Map<String, PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite) {
-        this.id=id;
+    public User(int userId, String firstName, String lastName, String email, Integer age, Map<String, PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -33,12 +35,29 @@ public class User implements Comparable<User> {
         this.isFavorite = isFavorite;
     }
 
-    public int getId() {
-        return id;
+    public User (Integer userId, String firstName, String lastName, String email, Integer age, Map<String, PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company){
+        this(userId, firstName, lastName, email, age, phoneNumbers, address, jobTitle, company, false);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public User (Integer userId, String firstName, String lastName, PhoneNumber phoneNumber, boolean isFavorite){
+        this(userId,firstName,lastName,null, null, new HashMap<>(), null, null, null, isFavorite);
+        this.phoneNumbers.put(DEFAULT_PHONE_NUMBER_GROUP,phoneNumber);
+    }
+
+    public User (Integer userId, String firstName, String lastName, PhoneNumber phoneNumber){
+        this(userId,firstName,lastName,phoneNumber,false);
+    }
+
+    public User (Integer userId, String firstName, String lastName, String phoneNumber){
+        this(userId, firstName, lastName, new PhoneNumber(phoneNumber), false);
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
