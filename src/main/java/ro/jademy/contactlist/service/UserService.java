@@ -5,7 +5,6 @@ import ro.jademy.contactlist.model.Company;
 import ro.jademy.contactlist.model.PhoneNumber;
 import ro.jademy.contactlist.model.User;
 
-import javax.swing.plaf.ListUI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
