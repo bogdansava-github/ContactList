@@ -296,7 +296,7 @@ public class Menu {
                 case 5:
 
                     System.out.print("Country code: ");
-                    String countryCode=scanner.next();
+                    String countryCode = scanner.next();
                     System.out.println("Phone number");
                     String mobileNumber = scanner.next();
                     editedUser.setMobilePhoneNumber(countryCode, mobileNumber);
@@ -305,7 +305,7 @@ public class Menu {
 
                 case 6:
                     System.out.print("Country code: ");
-                    countryCode=scanner.next();
+                    countryCode = scanner.next();
                     System.out.println("Phone number");
                     mobileNumber = scanner.next();
                     editedUser.setHomePhoneNumber(countryCode, mobileNumber);
@@ -313,7 +313,7 @@ public class Menu {
 
                 case 7:
                     System.out.print("Country code: ");
-                    countryCode=scanner.next();
+                    countryCode = scanner.next();
                     System.out.println("Phone number");
                     mobileNumber = scanner.next();
                     editedUser.setWorkPhoneNumber(countryCode, mobileNumber);
