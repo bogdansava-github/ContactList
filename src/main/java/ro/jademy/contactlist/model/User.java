@@ -133,6 +133,18 @@ public class User implements Comparable<User>
         this.phoneNumbers = phoneNumbers;
     }
 
+    public void setMobilePhoneNumber(String countryCode, String mobileNumber){
+        this.getPhoneNumbers().put("mobile", new PhoneNumber(countryCode, mobileNumber));
+    }
+
+    public void setHomePhoneNumber(String countryCode, String mobileNumber){
+        this.getPhoneNumbers().put("home", new PhoneNumber(countryCode, mobileNumber));
+    }
+
+    public void setWorkPhoneNumber(String countryCode, String mobileNumber){
+        this.getPhoneNumbers().put("work", new PhoneNumber(countryCode, mobileNumber));
+    }
+
     public Address getAddress()
     {
         return address;
@@ -163,6 +175,10 @@ public class User implements Comparable<User>
         this.company = company;
     }
 
+    public void setCompanyName(String companyName) {
+        this.company.setName(companyName);
+    }
+
     public boolean isFavorite()
     {
         return isFavorite;
@@ -176,7 +192,7 @@ public class User implements Comparable<User>
     @Override
     public String toString()
     {
-        return "\n" + ANSI_RED + firstName + " " + lastName + ANSI_RESET + ((isFavorite) ? " *" : "")
+        return "\n" + ANSI_RED +userId+". "+ firstName + " " + lastName + ANSI_RESET + ((isFavorite) ? " *" : "")
                 + "\n" + ((jobTitle == null || jobTitle == "") ? "" : jobTitle + "\n")
                 + (company.getName() == null ? "-" : company.getName())
                 + ANSI_YELLOW + "\n----------------------------------------------------------------------------------------------" + ANSI_RESET

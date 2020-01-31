@@ -6,19 +6,16 @@ import ro.jademy.contactlist.service.UserService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Menu
-{
+public class Menu {
 
     private Scanner scanner = new Scanner(System.in);
     private UserService userService;
 
-    public Menu(UserService userService)
-    {
+    public Menu(UserService userService) {
         this.userService = userService;
     }
 
-    public static void printMenu()
-    {
+    public void printMenu() {
         System.out.println(User.ANSI_YELLOW + "****************************" + User.ANSI_RESET);
         System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 1. List all contacts     " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
         System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 2. Details by id         " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
@@ -32,19 +29,31 @@ public class Menu
         System.out.println(User.ANSI_YELLOW + "****************************" + User.ANSI_RESET);
     }
 
-    public static void printContactDetailsMenu()
-    {
+    public void printContactDetailsMenu() {
 
-            System.out.println("*******************");
-            System.out.println("* 1. Input Id     *");
-            System.out.println("* 2. Return       *");
-            System.out.println("*******************");
+        System.out.println("*******************");
+        System.out.println("* 1. Input Id     *");
+        System.out.println("* 2. Return       *");
+        System.out.println("*******************");
 
     }
 
-    public void showMenu()
-    {
+    public void printEditContactMenu() {
 
+        System.out.println("*********Edit*********");
+        System.out.println("* 1.  First name     *");
+        System.out.println("* 2.  Last name      *");
+        System.out.println("* 3.  Job title      *");
+        System.out.println("* 4.  Company name   *");
+        System.out.println("* 5.  Mobile number  *");
+        System.out.println("* 6.  Home number    *");
+        System.out.println("* 7.  Work number    *");
+        System.out.println("* 8.  Return         *");
+        System.out.println("**********************");
+
+    }
+
+    public void showMenu(UserForm userForm) {
 
         scanner.useDelimiter("\\n");
         boolean menuExit = false;
@@ -82,8 +91,7 @@ public class Menu
                     System.out.print("Please input search string: ");
                     String criteria = scanner.next();
                     userService.getContacts();
-                    for (User user : userService.search(criteria))
-                    {
+                    for (User user : userService.search(criteria)) {
                         System.out.println(user);
                     }
                     break;
@@ -93,27 +101,30 @@ public class Menu
                             .mapToInt(User::getUserId)
                             .summaryStatistics();
                     int id = statistics.getMax() + 1;
-                    userService.addContact(CreateUserFromScanner.createContact(CreateUserFromScanner.createNewUser(id)));
+                    userService.addContact(userForm.createNewUser(id));
                     break;
 
                 case 6: //edit contact
+
+
+                    System.out.print("Search for a contact: ");
+                    criteria = scanner.next();
+                    userService.getContacts();
+                    for (User user : userService.search(criteria)) {
+                        System.out.println(user);
+                    }
                     System.out.print("Please input a user id you want to edit: ");
                     int userId = scanner.nextInt();
-                    try
-                    {
-                        userService.getContactById(userId).get();
 
-                        ArrayList<Object> userData = CreateUserFromScanner.createNewUser(userId);
+                    Optional<User> userOpt = userService.getContactById(userId);
 
-                        userService.editContact((int) userData.get(0), (String) userData.get(1), (String) userData.get(2),
-                                (String) userData.get(3), (int) userData.get(4), (Map<String, PhoneNumber>) userData.get(5),
-                                (Address) userData.get(6), (String) userData.get(7), (Company) userData.get(8),
-                                (boolean) userData.get(9));
+                    if (userOpt.isPresent()) {
+                        User editedUser = editContactDetails(userOpt.get());
 
-                    }
-                    catch (NoSuchElementException ex)
-                    {
-
+                        userService.editContact(editedUser.getUserId(), editedUser.getFirstName(), editedUser.getLastName(), editedUser.getEmail(),
+                                editedUser.getAge(), editedUser.getPhoneNumbers(), editedUser.getAddress(), editedUser.getJobTitle(), editedUser.getCompany(),
+                                editedUser.isFavorite());
+                    } else {
                         System.out.println("\nThis user id is not in your contact list\n");
                     }
                     break;
@@ -121,16 +132,16 @@ public class Menu
                 case 7: //remove contact
                     System.out.print("Please input a user id you want to remove: ");
                     userId = scanner.nextInt();
-                    try
-                    {
+                    userOpt = userService.getContactById(userId);
+
+
+                    if (userOpt.isPresent()) {
                         userService.getContactById(userId).get();
 
                         userService.removeContact(userId);
                         System.out.println("Done!!!");
 
-                    }
-                    catch (NoSuchElementException ex)
-                    {
+                    } else {
                         System.out.println("\nThis user id is not in your contact list\n");
                     }
 
@@ -187,24 +198,21 @@ public class Menu
 
     }
 
-    public void printContactDetails()
-    {
+    public void printContactDetails() {
 
 
         Scanner scanner = new Scanner(System.in);
         boolean menuExit = false;
 
 
-        while (!menuExit)
-        {
+        while (!menuExit) {
 
             printContactDetailsMenu();
             System.out.print("Please choose an option (1-2): ");
 
             int option = scanner.nextInt();
 
-            switch (option)
-            {
+            switch (option) {
 
 
                 case 1:
@@ -212,12 +220,9 @@ public class Menu
                     System.out.print("Input id: ");
                     int id = scanner.nextInt();
 
-                    try
-                    {
+                    try {
                         System.out.println(userService.getContactById(id).get());
-                    }
-                    catch (NoSuchElementException ex)
-                    {
+                    } catch (NoSuchElementException ex) {
                         System.out.println("\nThis user id is not in your contact list\n");
                     }
 
@@ -239,15 +244,104 @@ public class Menu
 
     }
 
-    public void printUserMap(Map<Character, List<User>> map, int listSize)
-    {
+    public User editContactDetails(User user) {
 
-        for (Map.Entry<Character, List<User>> listEntry : map.entrySet())
-        {
+
+        User editedUser = new User(user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmail(),
+                user.getAge(), user.getPhoneNumbers(), user.getAddress(), user.getJobTitle(), user.getCompany(),
+                user.isFavorite());
+
+        Scanner scanner = new Scanner(System.in);
+        boolean menuExit = false;
+
+
+        while (!menuExit) {
+
+            printEditContactMenu();
+            System.out.print("Please choose an option (1-8): ");
+
+            int option = scanner.nextInt();
+
+            switch (option) {
+
+
+                case 1:
+
+                    System.out.print("Input first name: ");
+                    String fName = scanner.next();
+                    editedUser.setFirstName(fName);
+
+                    break;
+
+                case 2:
+                    System.out.print("Input last name: ");
+                    String lName = scanner.next();
+                    editedUser.setLastName(lName);
+
+                    break;
+
+                case 3:
+                    System.out.print("Input job title: ");
+                    String jobTitle = scanner.next();
+                    editedUser.setJobTitle(jobTitle);
+                    break;
+
+                case 4:
+                    System.out.print("Input company name: ");
+                    String companyName = scanner.next();
+                    editedUser.setCompanyName(companyName);
+
+                    break;
+
+                case 5:
+
+                    System.out.print("Country code: ");
+                    String countryCode=scanner.next();
+                    System.out.println("Phone number");
+                    String mobileNumber = scanner.next();
+                    editedUser.setMobilePhoneNumber(countryCode, mobileNumber);
+
+                    break;
+
+                case 6:
+                    System.out.print("Country code: ");
+                    countryCode=scanner.next();
+                    System.out.println("Phone number");
+                    mobileNumber = scanner.next();
+                    editedUser.setHomePhoneNumber(countryCode, mobileNumber);
+                    break;
+
+                case 7:
+                    System.out.print("Country code: ");
+                    countryCode=scanner.next();
+                    System.out.println("Phone number");
+                    mobileNumber = scanner.next();
+                    editedUser.setWorkPhoneNumber(countryCode, mobileNumber);
+                    break;
+
+
+                case 8:
+
+                    menuExit = true;
+
+                    break;
+
+
+                default:
+                    System.out.println("\nPlease choose an option (1-8): ");
+                    option = scanner.nextInt();
+
+            }
+        }
+        return editedUser;
+    }
+
+    public void printUserMap(Map<Character, List<User>> map, int listSize) {
+
+        for (Map.Entry<Character, List<User>> listEntry : map.entrySet()) {
             System.out.println("         " + listEntry.getKey());
 
-            for (User user : listEntry.getValue())
-            {
+            for (User user : listEntry.getValue()) {
                 System.out.println(user.getUserId()
                         + ". "
                         + user.getLastName()

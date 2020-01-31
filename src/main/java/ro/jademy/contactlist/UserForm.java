@@ -10,11 +10,9 @@ import ro.jademy.contactlist.service.FileUserService;
 
 import java.util.*;
 
-public class CreateUserFromScanner {
+public class UserForm {
 
-
-    //public static User createNewUser(int id) {
-    public static ArrayList<Object> createNewUser(int id) {
+    public User createNewUser(int id) {
 
         System.out.print("Input first name: ");
         String fName = Main.scanner.nextLine();
@@ -191,36 +189,8 @@ public class CreateUserFromScanner {
 
         System.out.print("Add to favorite? (y/n): ");
         String answer = Main.scanner.next();
-        boolean isFavorite = (answer.equals("y") || answer.equals("Y") ? true : false);
+        boolean isFavorite = answer.equals("y") || answer.equals("Y");
 
-
-        ArrayList<Object> userData = new ArrayList<>();
-
-        userData.add(id);
-        userData.add(fName);
-        userData.add(lName);
-        userData.add(email);
-        userData.add(age);
-        userData.add(phoneNumbersNewUser);
-        userData.add(homeAddress);
-        userData.add(jobTitle);
-        userData.add(company);
-        userData.add(isFavorite);
-        /*ArrayList<Object>userData=Arrays.asList(id, fName,lName, email,age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
-        User user = createContact(id, fName, lName, email, age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
-        return user;*/
-        return userData;
-
-    }
-
-/*    public static User createContact(int id, String fName, String lName, String email, int age, Map<String,
-            PhoneNumber> phoneNumbers, Address homeAddress, String jobTitle, Company company, boolean isFav) throws InputMismatchException {
-    return new User(id, fName, lName, email, age, phoneNumbers, homeAddress, jobTitle, company, isFav);*/
-
-    public static User createContact(ArrayList<Object> userData) {
-
-        return new User((int) userData.get(0), (String) userData.get(1), (String) userData.get(2), (String) userData.get(3),
-                (int) userData.get(4), (Map<String, PhoneNumber>) userData.get(5), (Address) userData.get(6),
-                (String) userData.get(7), (Company) userData.get(8), (boolean) userData.get(9));
+        return new User(id, fName, lName, email, age, phoneNumbersNewUser, homeAddress, jobTitle, company, isFavorite);
     }
 }
