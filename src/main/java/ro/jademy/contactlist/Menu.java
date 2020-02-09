@@ -25,7 +25,8 @@ public class Menu {
         System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 6. Edit contact          " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
         System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 7. Remove contact        " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
         System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 8. Statistics            " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
-        System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 9. EXIT                  " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
+        System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 9. Backups               " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
+        System.out.println(User.ANSI_YELLOW + "*" + User.ANSI_RESET + " 10. EXIT                 " + User.ANSI_YELLOW + "*" + User.ANSI_RESET);
         System.out.println(User.ANSI_YELLOW + "****************************" + User.ANSI_RESET);
     }
 
@@ -53,15 +54,42 @@ public class Menu {
 
     }
 
+    public void printBackupsMenu() {
+
+        System.out.println("***************Backups***************");
+        System.out.println("* 1.  Create backup                 *");
+        System.out.println("* 2.  View backup file details      *");
+        System.out.println("* 3.  Restore from backup           *");
+        System.out.println("* 4.  Delete backup                 *");
+        System.out.println("* 5.  Return                        *");
+        System.out.println("*************************************");
+
+    }
+
     public void showMenu(UserForm userForm) {
 
         scanner.useDelimiter("\\n");
         boolean menuExit = false;
         while (!menuExit) {
             printMenu();
-            System.out.print("Please choose an option: ");
-            int option = scanner.nextInt();
-            scanner.nextLine();
+
+            int x = 1;
+            int option = 0;
+            do {
+
+                try {
+                    System.out.print("Please choose an option (1-10): ");
+                    option = scanner.nextInt();
+
+
+                    x = 2;
+                } catch (InputMismatchException ex) {
+                    System.out.print("Please input a number!!!\n");
+                    scanner.nextLine();
+                }
+
+            } while (x == 1);
+
 
             System.out.println();
             switch (option) {
@@ -182,15 +210,16 @@ public class Menu {
                     double averageAge = statistics.getAverage();
                     System.out.println("The average age of your contact list is: " + averageAge + " years");
                     break;
-
                 case 9:
+                    backupContactFile();
+                    break;
+                case 10:
                     System.exit(0);
                     break;
 
                 default:
 
-                    System.out.print("Please choose a valid option (1-9): ");
-                    option = scanner.nextInt();
+                    System.out.print("Please choose a valid option (1-10)\n\n");
             }
 
 
@@ -244,6 +273,66 @@ public class Menu {
 
     }
 
+    public void backupContactFile() {
+
+
+        Scanner scanner = new Scanner(System.in);
+        boolean menuExit = false;
+        while (!menuExit) {
+            printBackupsMenu();
+
+            //validate that the input is a number
+            int x = 1;
+            int option = 0;
+            do {
+
+                try {
+                    System.out.print("Please choose an option (1-5): ");
+                    option = scanner.nextInt();
+
+
+                    x = 2;
+                } catch (InputMismatchException ex) {
+                    System.out.println("Please input a number!!!");
+                    scanner.nextLine();
+                }
+
+            } while (x == 1);
+
+
+            //option menu
+            switch (option) {
+                case 1:
+                    //create backup
+                    break;
+
+                case 2:
+                    //view backup files details
+                    break;
+
+                case 3:
+                    //restore from backups
+                    break;
+
+                case 4:
+                    //delete backup file
+                    break;
+
+                case 5:
+
+                    menuExit = true;
+
+                    break;
+
+
+                default:
+                    System.out.print("\nPlease choose an option (1-5): ");
+                    scanner.nextInt();
+            }
+        }
+    }
+
+
     public User editContactDetails(User user) {
 
 
@@ -258,9 +347,25 @@ public class Menu {
         while (!menuExit) {
 
             printEditContactMenu();
-            System.out.print("Please choose an option (1-8): ");
 
-            int option = scanner.nextInt();
+            //validate that the input is a number
+            int x = 1;
+            int option = 0;
+            do {
+
+                try {
+                    System.out.print("Please choose an option (1-8): ");
+                    option = scanner.nextInt();
+
+
+                    x = 2;
+                } catch (InputMismatchException ex) {
+                    System.out.print("Please input a number!!!\n");
+                    scanner.nextLine();
+                }
+
+            } while (x == 1);
+
 
             switch (option) {
 
