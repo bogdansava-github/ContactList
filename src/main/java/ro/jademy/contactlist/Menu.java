@@ -4,16 +4,14 @@ import ro.jademy.contactlist.model.*;
 import ro.jademy.contactlist.service.FileUserService;
 import ro.jademy.contactlist.service.UserService;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Menu {
@@ -360,7 +358,31 @@ public class Menu {
                     break;
 
                 case 4:
-                    //delete backup file
+                    //search for a file
+                    //delete that file
+                    System.out.print("input end of file number .csv: ");
+                    scanner.nextLine();
+                    String endFileName=scanner.nextLine();
+
+                    FilenameFilter filter= new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String s) {
+                            return s.endsWith(endFileName);
+                        }
+                    };
+                    String[] results = dir.list(filter);
+
+                    if (results == null){
+                        System.out.println("file not found");
+                    } else
+                        for (int i = 0; i< results.length; i++) {
+                            String filename = results[i];
+                            File f=new File(path+filename);
+                            System.out.println(filename+" deleted");
+                            f.delete();
+                        }
+
+
                     break;
 
                 case 5:
