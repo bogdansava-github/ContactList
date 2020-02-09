@@ -1,8 +1,18 @@
 package ro.jademy.contactlist;
 
 import ro.jademy.contactlist.model.*;
+import ro.jademy.contactlist.service.FileUserService;
 import ro.jademy.contactlist.service.UserService;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -275,11 +285,15 @@ public class Menu {
 
     public void backupContactFile() {
 
+        String path = "backup" + File.separator;
+        File dir = new File(path);
+        dir.mkdir();
 
         Scanner scanner = new Scanner(System.in);
         boolean menuExit = false;
         while (!menuExit) {
             printBackupsMenu();
+
 
             //validate that the input is a number
             int x = 1;
@@ -304,10 +318,41 @@ public class Menu {
             switch (option) {
                 case 1:
                     //create backup
-                    break;
 
+                    try {
+
+
+                        String fileName = "contacts_bkp_" + System.currentTimeMillis() + ".csv";
+
+                        File source = new File("contacts.csv");
+                        File destination = new File(path + fileName);
+                        Files.copy(source.toPath(), destination.toPath());
+
+
+                        System.out.println("Backup created with the name: " + fileName + "\n");
+                        break;
+                    } catch (IOException ex) {
+                        System.out.println(ex);
+                    }
                 case 2:
                     //view backup files details
+
+                    try {
+
+                        for (String d : dir.list()
+                        ) {
+                            Path path1=FileSystems.getDefault().getPath("backup"+File.separator,d);
+                            BasicFileAttributes attr = Files.readAttributes(path1, BasicFileAttributes.class);
+                            System.out.println(d + " ");
+                            System.out.println("created on "+attr.creationTime());
+                            System.out.println(attr.size()+" bytes");
+                            System.out.println();
+
+
+                        }
+                    } catch (IOException ex) {
+                        System.out.println(ex);
+                    }
                     break;
 
                 case 3:

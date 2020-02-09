@@ -5,6 +5,7 @@ import ro.jademy.contactlist.model.Company;
 import ro.jademy.contactlist.model.PhoneNumber;
 import ro.jademy.contactlist.model.User;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,4 +33,6 @@ public interface UserService {
     List<User> search(String query);
 
     Map<Character, List<User>> makeUserMap(ArrayList<User> userList);
+
+
 }
