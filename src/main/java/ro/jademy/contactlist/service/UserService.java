@@ -34,5 +34,12 @@ public interface UserService {
 
     Map<Character, List<User>> makeUserMap(ArrayList<User> userList);
 
+    void createBackup();
+
+    void viewBackupFilesDetails();
+
+    void restoreFromBackup(String fileName);
+
+    void deleteBackupFile(String endFileName);
 
 }

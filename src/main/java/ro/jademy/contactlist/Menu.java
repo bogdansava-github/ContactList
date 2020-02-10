@@ -316,45 +316,20 @@ public class Menu {
             switch (option) {
                 case 1:
                     //create backup
-
-                    try {
-
-
-                        String fileName = "contacts_bkp_" + System.currentTimeMillis() + ".csv";
-
-                        File source = new File("contacts.csv");
-                        File destination = new File(path + fileName);
-                        Files.copy(source.toPath(), destination.toPath());
-
-
-                        System.out.println("Backup created with the name: " + fileName + "\n");
-                        break;
-                    } catch (IOException ex) {
-                        System.out.println(ex);
-                    }
+                    userService.createBackup();
+                    break;
                 case 2:
                     //view backup files details
-
-                    try {
-
-                        for (String d : dir.list()
-                        ) {
-                            Path path1=FileSystems.getDefault().getPath("backup"+File.separator,d);
-                            BasicFileAttributes attr = Files.readAttributes(path1, BasicFileAttributes.class);
-                            System.out.println(d + " ");
-                            System.out.println("created on "+attr.creationTime());
-                            System.out.println(attr.size()+" bytes");
-                            System.out.println();
-
-
-                        }
-                    } catch (IOException ex) {
-                        System.out.println(ex);
-                    }
+                    userService.viewBackupFilesDetails();
                     break;
 
                 case 3:
                     //restore from backups
+                    System.out.print("input file name you want to restore: ");
+                    scanner.nextLine();
+                    String fileName = scanner.nextLine();
+
+                    userService.restoreFromBackup(fileName);
                     break;
 
                 case 4:
@@ -362,26 +337,9 @@ public class Menu {
                     //delete that file
                     System.out.print("input end of file number .csv: ");
                     scanner.nextLine();
-                    String endFileName=scanner.nextLine();
+                    String endFileName = scanner.nextLine();
 
-                    FilenameFilter filter= new FilenameFilter() {
-                        @Override
-                        public boolean accept(File dir, String s) {
-                            return s.endsWith(endFileName);
-                        }
-                    };
-                    String[] results = dir.list(filter);
-
-                    if (results == null){
-                        System.out.println("file not found");
-                    } else
-                        for (int i = 0; i< results.length; i++) {
-                            String filename = results[i];
-                            File f=new File(path+filename);
-                            System.out.println(filename+" deleted");
-                            f.delete();
-                        }
-
+                    userService.deleteBackupFile(endFileName);
 
                     break;
 

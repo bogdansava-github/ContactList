@@ -6,6 +6,8 @@ import ro.jademy.contactlist.model.PhoneNumber;
 import ro.jademy.contactlist.model.User;
 
 import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,7 +179,11 @@ public class FileUserService implements UserService
         return contactList;
     }
 
-    private void writeToFile()
+    private void writeToFile() {
+        writeToFile(contactsFile);
+    }
+
+    private void writeToFile(File contactsFile)
     {
         // TODO: implement method using the contacts and file properties
 
@@ -227,6 +233,84 @@ public class FileUserService implements UserService
             System.out.println("Failed to write content to file " + contactsFile + "\n" + ex);
         }
 
+
+    }
+
+
+    public void createBackup(){
+        String path = "backup" + File.separator;
+        try {
+
+
+            String fileName = "contacts_bkp_" + System.currentTimeMillis() + ".csv";
+
+            File source = new File("contacts.csv");
+            File destination = new File(path + fileName);
+            Files.copy(source.toPath(), destination.toPath());
+
+
+            System.out.println("Backup created with the name: " + fileName + "\n");
+
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+
+    }
+
+    public void viewBackupFilesDetails(){
+        String path = "backup" + File.separator;
+        File dir = new File(path);
+        try {
+
+            for (String d : dir.list()
+            ) {
+                Path path1 = FileSystems.getDefault().getPath("backup" + File.separator, d);
+                BasicFileAttributes attr = Files.readAttributes(path1, BasicFileAttributes.class);
+                System.out.println(d + " ");
+                System.out.println("created on " + attr.creationTime());
+                System.out.println(attr.size() + " bytes");
+                System.out.println();
+
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public  void restoreFromBackup(String fileName){
+        String path = "backup" + File.separator;
+        try {
+
+
+            //String fileName = "contacts_bkp_" + System.currentTimeMillis() + ".csv";
+
+            File destination = new File("contacts.csv");
+            File source = new File(path + fileName);
+            Files.copy(source.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+
+            System.out.println("Backup restored!!!");
+
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public void deleteBackupFile(String endFileName){
+        String path = "backup" + File.separator;
+        File dir = new File(path);
+        FilenameFilter filter = (dir1, s) -> s.endsWith(endFileName);
+        String[] results = dir.list(filter);
+
+        if (results == null) {
+            System.out.println("file not found");
+        } else
+            for (int i = 0; i < results.length; i++) {
+                String filename = results[i];
+                File f = new File(path + filename);
+                System.out.println(filename + " deleted");
+                f.delete();
+            }
 
     }
 
