@@ -238,7 +238,7 @@ public class Menu {
     public void printContactDetails() {
 
 
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
         boolean menuExit = false;
 
 
@@ -287,7 +287,7 @@ public class Menu {
         File dir = new File(path);
         dir.mkdir();
 
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
         boolean menuExit = false;
         while (!menuExit) {
             printBackupsMenu();
@@ -365,7 +365,7 @@ public class Menu {
                 user.getAge(), user.getPhoneNumbers(), user.getAddress(), user.getJobTitle(), user.getCompany(),
                 user.isFavorite());
 
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
         boolean menuExit = false;
 
 
