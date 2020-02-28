@@ -15,6 +15,8 @@ public interface UserService {
 
     List<User> getContacts();
 
+    public List<User> getContactsIfCsvModified();
+
     Optional<User> getContactById(int userId);
 
     void addContact(User contact);

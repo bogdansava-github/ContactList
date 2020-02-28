@@ -28,14 +28,26 @@ public class FileUserService implements UserService
     }
 
     @Override
-    public List<User> getContacts()
+public List<User> getContacts()
+{
+
+    // check if contacts is empty
+    if (contacts.isEmpty())
+    {
+        contacts.addAll(readFromFile());
+    }
+
+    // else return the current list of contacts
+    return contacts;
+}
+
+    @Override
+    public List<User> getContactsIfCsvModified()
     {
 
-        // check if contacts is empty
-        if (contacts.isEmpty())
-        {
+            contacts.clear();
             contacts.addAll(readFromFile());
-        }
+
 
         // else return the current list of contacts
         return contacts;
@@ -247,8 +259,6 @@ public class FileUserService implements UserService
             File source = new File("contacts.csv");
             File destination = new File(path + fileName);
             Files.copy(source.toPath(), destination.toPath());
-
-
             System.out.println("Backup created with the name: " + fileName + "\n");
 
         } catch (IOException ex) {
