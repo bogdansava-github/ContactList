@@ -23,4 +23,5 @@
 hs_err_pid*
 *.iml
 .idea
-/src/main/resources/
+src/main/resources/application.properties
+target
