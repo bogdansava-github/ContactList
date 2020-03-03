@@ -2,7 +2,7 @@ package ro.jademy.contactlist.model;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+ dev
 public class User implements Comparable<User> {
 
     private int id;
