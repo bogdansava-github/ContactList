@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.*;
+import java.util.Properties;
 import java.util.*;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -88,6 +89,11 @@ public class DBUserService implements UserService {
 
     }
 
+
+    @Override
+    public List<User> getContacts() {
+        return null;
+    }
 
     @Override
     public List<User> getContacts(Connection conn) {
