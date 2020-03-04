@@ -6,6 +6,7 @@ import ro.jademy.contactlist.model.PhoneNumber;
 import ro.jademy.contactlist.model.User;
 
 import java.io.File;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public interface UserService {
 
     List<User> getContacts();
+    public List<User> getContacts(Connection conn);
 
     public List<User> getContactsIfCsvModified();
 
@@ -43,5 +45,6 @@ public interface UserService {
     void restoreFromBackup(String fileName);
 
     void deleteBackupFile(String endFileName);
+
 
 }
