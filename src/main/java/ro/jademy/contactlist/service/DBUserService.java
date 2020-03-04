@@ -30,7 +30,7 @@ public class DBUserService implements UserService {
     }
 
     //Open a connection
-    public static Connection getConnection(Properties props) {
+    public static Connection getConnection(Properties props) throws SQLException {
 
         String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port") + "/";
         String dbName = props.getProperty("db.name");
@@ -75,8 +75,8 @@ public class DBUserService implements UserService {
             } catch (SQLException e) {
                 System.out.println("Database exist!");
                 System.out.println("Accessing " + dbName + " database ...\n");
-                //stmt.execute("USE " + dbName);
-                //System.exit(0);
+                stmt.execute("USE " + dbName);
+                System.exit(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
