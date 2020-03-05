@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.sql.*;
 import java.util.Properties;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 import ro.jademy.contactlist.model.Address;
@@ -36,10 +37,11 @@ public class DBUserService implements UserService {
     //Open a connection
     public static Connection getConnection(Properties props) {
         Connection conn = null;
-        String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port") + "/";
         String dbName = props.getProperty("db.name");
+        String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port") + "/" + dbName + "?useOldAliasMetadataBehavior=true";
+
         try {
-            conn = DriverManager.getConnection(dbUrl + dbName, setConnectionProps(props));
+            conn = DriverManager.getConnection(dbUrl, setConnectionProps(props));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,8 +51,9 @@ public class DBUserService implements UserService {
 
     public void createDataBase(Properties props) throws SQLException {
         Statement stmt = null;
-        String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port") + "/";
         String dbName = props.getProperty("db.name");
+        String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port");
+
         try {
             //Create Database if not exists
             System.out.println("Connecting ...");
@@ -113,21 +116,82 @@ public class DBUserService implements UserService {
         Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
 
         //TODO: write the query to get User from DB
-        String query = "SELECT u.user_id";
+        String query = "SELECT \n" +
+                "users.user_id," +
+                "users.first_name," +
+                "users.last_name," +
+                "users.email," +
+                "users.age," +
+                "ph1.phone_cat," +
+                "ph1.country_code," +
+                "ph1.phone_number," +
+                "ph2.phone_cat," +
+                "ph2.country_code," +
+                "ph2.phone_number,\n" +
+                "ph3.phone_cat," +
+                "ph3.country_code," +
+                "ph3.phone_number," +
+                "ad_h.street_name," +
+                "ad_h.street_no," +
+                "ad_h.apt_no," +
+                "ad_h.apt_floor," +
+                "ad_h.zip_code," +
+                "ad_h.city city," +
+                "ad_h.country,\n" +
+                "companies.job_title," +
+                "companies.company_name," +
+                "ad_w.street_name," +
+                "ad_w.street_no," +
+                "ad_w.apt_no," +
+                "ad_w.apt_floor," +
+                "ad_w.zip_code," +
+                "ad_w.city, " +
+                "ad_w.country," +
+                "users.is_favourite\n" +
+                "\n" +
+                "FROM users\n" +
+                "JOIN phonenumbers AS ph1 ON (users.user_id=ph1.user_id AND ph1.phone_cat='m')\n" +
+                "JOIN phonenumbers AS ph2 ON (users.user_id=ph2.user_id AND ph2.phone_cat='h')\n" +
+                "JOIN phonenumbers AS ph3 ON (users.user_id=ph3.user_id AND ph3.phone_cat='w')\n" +
+                "JOIN companies ON (users.user_id=companies.user_id)\n" +
+                "JOIN addresses AS ad_h ON (users.user_id=ad_h.user_id AND ad_h.address_cat='h')\n" +
+                "JOIN addresses AS ad_w ON (users.user_id=ad_w.user_id AND ad_w.address_cat='w');";
 
 
         try {
             Statement stm = conn.createStatement();
             ResultSet result = stm.executeQuery(query);
             while (result.next()) {
-                int id = result.getInt("user_id");
-                String fName = result.getString("first_name");
-                String lName = result.getString("last_name");
-                String email = result.getString("email");
-                int age = result.getInt("age");
+                int id = result.getInt(1);
+                String fName = result.getString(2);
+                String lName = result.getString(3);
+                String email = result.getString(4);
+                int age = result.getInt(5);
+                phoneNumbersNewUser.put(result.getString(6), new PhoneNumber(result.getString(7), result.getString(8)));
+                phoneNumbersNewUser.put(result.getString(9), new PhoneNumber(result.getString(10), result.getString(11)));
+                phoneNumbersNewUser.put(result.getString(12), new PhoneNumber(result.getString(13), result.getString(14)));
+                Address homeAdressNewUser = new Address(
+                        result.getString(15),
+                        result.getInt(16),
+                        result.getInt(17),
+                        result.getString(18),
+                        result.getString(19),
+                        result.getString(20),
+                        result.getString(21));
 
-                //TODO: phone numbers map
+                String title = result.getString(22);
 
+                Address companyAddressNewUser = new Address(
+                        result.getString(24),
+                        result.getInt(25),
+                        result.getInt(26),
+                        result.getString(27),
+                        result.getString(28),
+                        result.getString(29),
+                        result.getString(30));
+                String companyName = result.getString(23);
+                Company companyNewUser = new Company(companyName, companyAddressNewUser);
+                boolean isFav = result.getBoolean(31);
 
                 User user = new User(id, fName, lName, email, age, phoneNumbersNewUser, homeAdressNewUser, title, companyNewUser, isFav);
                 contactList.add(user);
@@ -145,7 +209,7 @@ public class DBUserService implements UserService {
 
     @Override
     public Optional<User> getContactById(int userId) {
-        return Optional.empty();
+        return contacts.stream().filter(u -> u.getUserId() == userId).findFirst();
     }
 
     @Override
@@ -165,13 +229,27 @@ public class DBUserService implements UserService {
     }
 
     @Override
-    public List<User> search(String query) {
-        return null;
+    public List<User> search(String criteria) {
+
+        contacts.stream()
+                .filter(user -> user.getLastName().toLowerCase().contains(criteria.toLowerCase())
+                        || user.getFirstName().toLowerCase().contains((criteria.toLowerCase()))
+                        || user.getCompany().getName().toLowerCase().contains((criteria.toLowerCase()))
+                        || user.getJobTitle().toLowerCase().contains((criteria.toLowerCase())))
+                .sorted()
+                .forEach(System.out::println);
+
+
+        return new ArrayList<>();
+
     }
 
     @Override
     public Map<Character, List<User>> makeUserMap(ArrayList<User> userList) {
-        return null;
+        return userList.stream()
+                .sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
+                .collect(Collectors.groupingBy(user -> user.getLastName().charAt(0), TreeMap::new, Collectors.toList()));
+
     }
 
     @Override

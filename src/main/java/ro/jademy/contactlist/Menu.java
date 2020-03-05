@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Connection;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public class Menu {
 
     }
 
-    public void showMenu(UserForm userForm) {
+    public void showMenu(UserForm userForm, Connection conn) {
 
         scanner.useDelimiter("\\n");
         boolean menuExit = false;
@@ -103,8 +104,8 @@ public class Menu {
             switch (option) {
 
                 case 1: //List all contacts in natural order
-
-                    printUserMap(userService.makeUserMap((ArrayList<User>) userService.getContacts()), userService.getContacts().size());
+                    //System.out.println(userService.getContacts(conn));
+                    printUserMap(userService.makeUserMap((ArrayList<User>) userService.getContacts(conn)), userService.getContacts(conn).size());
                     break;
 
                 case 2: //List user details
@@ -115,7 +116,7 @@ public class Menu {
                 case 3: //List favorites
 
                     ArrayList<User> favUserList = userService
-                            .getContacts()
+                            .getContacts(conn)
                             .stream()
                             .filter(User::isFavorite)
                             .collect(Collectors.toCollection(ArrayList::new));
@@ -187,27 +188,21 @@ public class Menu {
 
 
                     System.out.println("\n****************** Statistics **********************");
-                    System.out.println("You have " + userService.getContacts().size() + " contacts\n");
+                    System.out.println("You have " + userService.getContacts(conn).size() + " contacts\n");
 
                     int localContactsCount;
-                    localContactsCount = (int) userService.getContacts().stream()
+                    localContactsCount = (int) userService.getContacts(conn).stream()
                             .filter(user -> user.getAddress().getCity().equals("Bucharest"))
                             .count();
                     System.out.println(localContactsCount + " of your contacts are from Bucharest");
 
-                    int abroadContactsCount;
-                    abroadContactsCount = (int) userService.getContacts().stream()
-                            .filter(user -> !(user.getPhoneNumbers().get("mobile").getCountryCode().equals("+40")))
-                            .count();
-                    System.out.println(abroadContactsCount + " has mobile phone registered abroad");
-
                     int ageCount;
-                    ageCount = (int) userService.getContacts().stream()
-                            .filter(user -> (user.getAge() >= 20 && user.getAge() <= 30))
+                    ageCount = (int) userService.getContacts(conn).stream()
+                            .filter(user -> (user.getAge() >= 40 && user.getAge() <= 50))
                             .count();
-                    System.out.println(ageCount + " of your contacts have ages between 20 and 30");
+                    System.out.println(ageCount + " of your contacts have ages between 40 and 50");
 
-                    statistics = userService.getContacts().stream()
+                    statistics = userService.getContacts(conn).stream()
                             .mapToInt(User::getAge)
                             .summaryStatistics();
 

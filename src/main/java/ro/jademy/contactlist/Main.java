@@ -5,6 +5,7 @@ import ro.jademy.contactlist.service.FileUserService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -16,8 +17,9 @@ public class Main {
         //DBUserService db=new DBUserService(DBUserService.getConnection(getProperties()));
 
         //Menu menu = new Menu(new FileUserService("contacts.csv"));
-        Menu menu = new Menu(new DBUserService(DBUserService.getConnection(getProperties())));
-        menu.showMenu(new UserForm());
+        Connection conn=DBUserService.getConnection(getProperties());
+        Menu menu = new Menu(new DBUserService(conn));
+        menu.showMenu(new UserForm(), conn);
     }
 
     public static Properties getProperties() {
