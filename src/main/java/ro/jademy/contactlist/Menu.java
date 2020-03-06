@@ -105,7 +105,7 @@ public class Menu {
 
                 case 1: //List all contacts in natural order
                     //System.out.println(userService.getContacts(conn));
-                    printUserMap(userService.makeUserMap((ArrayList<User>) userService.getContacts(conn)), userService.getContacts(conn).size());
+                    printUserMap(userService.makeUserMap((ArrayList<User>) userService.getContacts()), userService.getContacts().size());
                     break;
 
                 case 2: //List user details
@@ -116,7 +116,7 @@ public class Menu {
                 case 3: //List favorites
 
                     ArrayList<User> favUserList = userService
-                            .getContacts(conn)
+                            .getContacts()
                             .stream()
                             .filter(User::isFavorite)
                             .collect(Collectors.toCollection(ArrayList::new));
@@ -134,11 +134,11 @@ public class Menu {
                     break;
 
                 case 5: //add new contact
-                    IntSummaryStatistics statistics = userService.getContacts().stream()
+                    /*IntSummaryStatistics statistics = userService.getContacts().stream()
                             .mapToInt(User::getUserId)
                             .summaryStatistics();
-                    int id = statistics.getMax() + 1;
-                    userService.addContact(userForm.createNewUser(id));
+                    int id = statistics.getMax() + 1;*/
+                    userService.addContact(userForm.createNewUser());
                     break;
 
                 case 6: //edit contact
@@ -188,21 +188,21 @@ public class Menu {
 
 
                     System.out.println("\n****************** Statistics **********************");
-                    System.out.println("You have " + userService.getContacts(conn).size() + " contacts\n");
+                    System.out.println("You have " + userService.getContacts().size() + " contacts\n");
 
                     int localContactsCount;
-                    localContactsCount = (int) userService.getContacts(conn).stream()
+                    localContactsCount = (int) userService.getContacts().stream()
                             .filter(user -> user.getAddress().getCity().equals("Bucharest"))
                             .count();
                     System.out.println(localContactsCount + " of your contacts are from Bucharest");
 
                     int ageCount;
-                    ageCount = (int) userService.getContacts(conn).stream()
+                    ageCount = (int) userService.getContacts().stream()
                             .filter(user -> (user.getAge() >= 40 && user.getAge() <= 50))
                             .count();
                     System.out.println(ageCount + " of your contacts have ages between 40 and 50");
 
-                    statistics = userService.getContacts(conn).stream()
+                    statistics = userService.getContacts().stream()
                             .mapToInt(User::getAge)
                             .summaryStatistics();
 
@@ -422,7 +422,7 @@ public class Menu {
 
                     System.out.print("Country code: ");
                     String countryCode = scanner.next();
-                    System.out.println("Phone number");
+                    System.out.print("Phone number: ");
                     String mobileNumber = scanner.next();
                     editedUser.setMobilePhoneNumber(countryCode, mobileNumber);
 

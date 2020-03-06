@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 public class User implements Comparable<User> {
 
 
-
-
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -30,8 +28,7 @@ public class User implements Comparable<User> {
     private boolean isFavorite;
 
     public User(int userId, String firstName, String lastName, String email, Integer age, Map<String,
-            PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite)
-    {
+            PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,135 +42,112 @@ public class User implements Comparable<User> {
     }
 
     public User(Integer userId, String firstName, String lastName, String email, Integer age, Map<String,
-            PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company)
-    {
+            PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company) {
         this(userId, firstName, lastName, email, age, phoneNumbers, address, jobTitle, company, false);
     }
 
-    public User(Integer userId, String firstName, String lastName, PhoneNumber phoneNumber, boolean isFavorite)
-    {
+    public User(Integer userId, String firstName, String lastName, PhoneNumber phoneNumber, boolean isFavorite) {
         this(userId, firstName, lastName, null, null, new HashMap<>(), null, null,
                 null, isFavorite);
         this.phoneNumbers.put(DEFAULT_PHONE_NUMBER_GROUP, phoneNumber);
     }
 
-    public User(Integer userId, String firstName, String lastName, PhoneNumber phoneNumber)
-    {
+    public User(Integer userId, String firstName, String lastName, PhoneNumber phoneNumber) {
         this(userId, firstName, lastName, phoneNumber, false);
     }
 
-    public User(Integer userId, String firstName, String lastName, String phoneNumber)
-    {
+    public User(Integer userId, String firstName, String lastName, String phoneNumber) {
         this(userId, firstName, lastName, new PhoneNumber(phoneNumber), false);
     }
 
-    public static Map<Character, List<User>> makeUserMap(ArrayList<User> userList)
-    {
+    public static Map<Character, List<User>> makeUserMap(ArrayList<User> userList) {
         Map<Character, List<User>> result = userList.stream()
                 .sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
                 .collect(Collectors.groupingBy(user -> user.getLastName().charAt(0), TreeMap::new, Collectors.toList()));
         return result;
     }
 
-    public int getUserId()
-    {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId)
-    {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName)
-    {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getLastName()
-    {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName)
-    {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public Integer getAge()
-    {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(Integer age)
-    {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public Map<String, PhoneNumber> getPhoneNumbers()
-    {
+    public Map<String, PhoneNumber> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setPhoneNumbers(Map<String, PhoneNumber> phoneNumbers)
-    {
+    public void setPhoneNumbers(Map<String, PhoneNumber> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
 
-    public void setMobilePhoneNumber(String countryCode, String mobileNumber){
-        this.getPhoneNumbers().put("mobile", new PhoneNumber(countryCode, mobileNumber));
+    public void setMobilePhoneNumber(String countryCode, String mobileNumber) {
+        this.getPhoneNumbers().put("m", new PhoneNumber(countryCode, mobileNumber));
     }
 
-    public void setHomePhoneNumber(String countryCode, String mobileNumber){
-        this.getPhoneNumbers().put("home", new PhoneNumber(countryCode, mobileNumber));
+    public void setHomePhoneNumber(String countryCode, String mobileNumber) {
+        this.getPhoneNumbers().put("h", new PhoneNumber(countryCode, mobileNumber));
     }
 
-    public void setWorkPhoneNumber(String countryCode, String mobileNumber){
-        this.getPhoneNumbers().put("work", new PhoneNumber(countryCode, mobileNumber));
+    public void setWorkPhoneNumber(String countryCode, String mobileNumber) {
+        this.getPhoneNumbers().put("w", new PhoneNumber(countryCode, mobileNumber));
     }
 
-    public Address getAddress()
-    {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address address)
-    {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public String getJobTitle()
-    {
+    public String getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(String jobTitle)
-    {
+    public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
     }
 
-    public Company getCompany()
-    {
+    public Company getCompany() {
         return company;
     }
 
-    public void setCompany(Company company)
-    {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
@@ -181,27 +155,24 @@ public class User implements Comparable<User> {
         this.company.setName(companyName);
     }
 
-    public boolean isFavorite()
-    {
+    public boolean isFavorite() {
         return isFavorite;
     }
 
-    public void setFavorite(boolean favorite)
-    {
+    public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
 
     @Override
-    public String toString()
-    {
-        return "\n" + ANSI_RED +userId+". "+ firstName + " " + lastName + ANSI_RESET + ((isFavorite) ? " *" : "")
+    public String toString() {
+        return "\n" + ANSI_RED + userId + ". " + firstName + " " + lastName + ANSI_RESET + ((isFavorite) ? " *" : "")
                 + "\n" + ((jobTitle == null || jobTitle == "") ? "" : jobTitle + "\n")
                 + (company.getName() == null ? "-" : company.getName())
                 + ANSI_YELLOW + "\n----------------------------------------------------------------------------------------------" + ANSI_RESET
-                + "\nhome phone: " + phoneNumbers.get("home")
-                + "\nmobile phone: " + phoneNumbers.get("mobile")
-                + "\nwork phone: " + phoneNumbers.get("work")
-                + "\nemail: " + email
+                + ((phoneNumbers.get("h") == null) ? "" : "\nhome phone: " + phoneNumbers.get("h"))
+                + ((phoneNumbers.get("m") == null) ? "" : "\nmobile phone: " + phoneNumbers.get("m"))
+                + ((phoneNumbers.get("w") == null) ? "" : "\nwork phone: " + phoneNumbers.get("w"))
+                + "\n" +((email == null || email == "") ? "" : email)
                 + "\nhome address: " + address
                 + "\nwork address: " + company.getAddress()
                 + ANSI_YELLOW + "\n----------------------------------------------------------------------------------------------" + ANSI_RESET;
@@ -210,8 +181,7 @@ public class User implements Comparable<User> {
 
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
@@ -222,16 +192,13 @@ public class User implements Comparable<User> {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(firstName, lastName, age, company);
     }
 
     @Override
-    public int compareTo(User o)
-    {
-        if (lastName.compareTo(o.lastName) == 0)
-        {
+    public int compareTo(User o) {
+        if (lastName.compareTo(o.lastName) == 0) {
             return firstName.compareTo(o.firstName);
         }
         return lastName.compareTo(o.lastName);

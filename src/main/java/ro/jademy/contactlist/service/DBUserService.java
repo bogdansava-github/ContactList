@@ -1,9 +1,8 @@
 package ro.jademy.contactlist.service;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Properties;
 import java.util.*;
@@ -26,40 +25,11 @@ public class DBUserService implements UserService {
         this.conn = conn;
     }
 
-    public static Properties setConnectionProps(Properties props) {
-
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", props.getProperty("db.user"));
-        connectionProps.put("password", props.getProperty("db.password"));
-        return connectionProps;
-    }
-
-    //Open a connection
-    public static Connection getConnection(Properties props) {
-        Connection conn = null;
-        String dbName = props.getProperty("db.name");
-        String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port") + "/" + dbName + "?useOldAliasMetadataBehavior=true";
-
-        try {
-            conn = DriverManager.getConnection(dbUrl, setConnectionProps(props));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
-
     public void createDataBase(Properties props) throws SQLException {
         Statement stmt = null;
         String dbName = props.getProperty("db.name");
-        String dbUrl = "jdbc:mysql://" + props.getProperty("db.url") + ":" + props.getProperty("db.port");
-
         try {
             //Create Database if not exists
-            System.out.println("Connecting ...");
-            Connection conn = DriverManager.getConnection(dbUrl, setConnectionProps(props));
-            System.out.println("Connection established!");
-
             System.out.println("Creating database...");
             stmt = conn.createStatement();
             stmt.execute("CREATE DATABASE " + dbName);
@@ -92,18 +62,12 @@ public class DBUserService implements UserService {
 
     }
 
-
     @Override
     public List<User> getContacts() {
-        return null;
-    }
-
-    @Override
-    public List<User> getContacts(Connection conn) {
 
         // check if contacts is empty
         if (contacts.isEmpty()) {
-            contacts.addAll(readFromDB(conn));
+            contacts.addAll(readFromDB());
         }
 
         // else return the current list of contacts
@@ -111,54 +75,16 @@ public class DBUserService implements UserService {
 
     }
 
-    private List<User> readFromDB(Connection conn) {
+    private List<User> readFromDB() {
         List<User> contactList = new ArrayList<>();
-        Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
 
         //TODO: write the query to get User from DB
-        String query = "SELECT \n" +
-                "users.user_id," +
-                "users.first_name," +
-                "users.last_name," +
-                "users.email," +
-                "users.age," +
-                "ph1.phone_cat," +
-                "ph1.country_code," +
-                "ph1.phone_number," +
-                "ph2.phone_cat," +
-                "ph2.country_code," +
-                "ph2.phone_number,\n" +
-                "ph3.phone_cat," +
-                "ph3.country_code," +
-                "ph3.phone_number," +
-                "ad_h.street_name," +
-                "ad_h.street_no," +
-                "ad_h.apt_no," +
-                "ad_h.apt_floor," +
-                "ad_h.zip_code," +
-                "ad_h.city city," +
-                "ad_h.country,\n" +
-                "companies.job_title," +
-                "companies.company_name," +
-                "ad_w.street_name," +
-                "ad_w.street_no," +
-                "ad_w.apt_no," +
-                "ad_w.apt_floor," +
-                "ad_w.zip_code," +
-                "ad_w.city, " +
-                "ad_w.country," +
-                "users.is_favourite\n" +
-                "\n" +
-                "FROM users\n" +
-                "JOIN phonenumbers AS ph1 ON (users.user_id=ph1.user_id AND ph1.phone_cat='m')\n" +
-                "JOIN phonenumbers AS ph2 ON (users.user_id=ph2.user_id AND ph2.phone_cat='h')\n" +
-                "JOIN phonenumbers AS ph3 ON (users.user_id=ph3.user_id AND ph3.phone_cat='w')\n" +
-                "JOIN companies ON (users.user_id=companies.user_id)\n" +
-                "JOIN addresses AS ad_h ON (users.user_id=ad_h.user_id AND ad_h.address_cat='h')\n" +
-                "JOIN addresses AS ad_w ON (users.user_id=ad_w.user_id AND ad_w.address_cat='w');";
 
 
         try {
+            String query = Files.lines(Paths.get("src/main/resources/db/readContacts.sql")).collect(Collectors.joining(" "));
+
+
             Statement stm = conn.createStatement();
             ResultSet result = stm.executeQuery(query);
             while (result.next()) {
@@ -167,6 +93,8 @@ public class DBUserService implements UserService {
                 String lName = result.getString(3);
                 String email = result.getString(4);
                 int age = result.getInt(5);
+
+                Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
                 phoneNumbersNewUser.put(result.getString(6), new PhoneNumber(result.getString(7), result.getString(8)));
                 phoneNumbersNewUser.put(result.getString(9), new PhoneNumber(result.getString(10), result.getString(11)));
                 phoneNumbersNewUser.put(result.getString(12), new PhoneNumber(result.getString(13), result.getString(14)));
@@ -195,8 +123,9 @@ public class DBUserService implements UserService {
 
                 User user = new User(id, fName, lName, email, age, phoneNumbersNewUser, homeAdressNewUser, title, companyNewUser, isFav);
                 contactList.add(user);
+                //phoneNumbersNewUser.clear();
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             ex.printStackTrace();
         }
         return contactList;
@@ -220,12 +149,100 @@ public class DBUserService implements UserService {
     @Override
     public void editContact(int userId, String firstName, String lastName, String email, Integer age, Map<String,
             PhoneNumber> phoneNumbers, Address address, String jobTitle, Company company, boolean isFavorite) {
+        Optional<User> userOpt = getContactById(userId);
 
+        // edit the contact only if the user was found
+        if (userOpt.isPresent()) {
+
+            User user = userOpt.get();
+
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setAge(age);
+            user.setPhoneNumbers(phoneNumbers);
+            user.setAddress(address);
+            user.setJobTitle(jobTitle);
+            user.setCompany(company);
+            user.setFavorite(isFavorite);
+
+
+            String queryUpdate = "UPDATE users " +
+                    "INNER JOIN companies ON users.user_id = companies.user_id " +
+                    "SET users.first_name = ?, users.last_name = ?, companies.job_title = ?, companies.company_name = ? " +
+                    "WHERE users.user_id = ? ";
+            try {
+                conn.setAutoCommit(false);
+
+                PreparedStatement preparedStmt = conn.prepareStatement(queryUpdate);
+                preparedStmt.setString(1, user.getFirstName());
+                preparedStmt.setString(2, user.getLastName());
+                preparedStmt.setString(3, user.getJobTitle());
+                preparedStmt.setString(4, user.getCompany().getName());
+                preparedStmt.setInt(5, user.getUserId());
+                preparedStmt.executeUpdate();
+                conn.commit();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String queryUpdateMobilePhones = "UPDATE phonenumbers SET country_code = ?, phone_number = ? WHERE user_id = ? AND phone_cat = 'm'";
+            String queryUpdateHomePhones = "UPDATE phonenumbers SET country_code = ?, phone_number = ? WHERE user_id = ? AND phone_cat = 'h'";
+            String queryUpdateWorkPhones = "UPDATE phonenumbers SET country_code = ?, phone_number = ? WHERE user_id = ? AND phone_cat = 'w'";
+
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement preparedStmt = conn.prepareStatement(queryUpdateMobilePhones);
+                preparedStmt.setString(1, user.getPhoneNumbers().get("m").getCountryCode());
+                preparedStmt.setString(2, user.getPhoneNumbers().get("m").getNumber());
+                preparedStmt.setInt(3, user.getUserId());
+                preparedStmt.executeUpdate();
+                conn.commit();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement preparedStmt = conn.prepareStatement(queryUpdateHomePhones);
+                preparedStmt.setString(1, user.getPhoneNumbers().get("h").getCountryCode());
+                preparedStmt.setString(2, user.getPhoneNumbers().get("h").getNumber());
+                preparedStmt.setInt(3, user.getUserId());
+                preparedStmt.executeUpdate();
+                conn.commit();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement preparedStmt = conn.prepareStatement(queryUpdateWorkPhones);
+                preparedStmt.setString(1, user.getPhoneNumbers().get("w").getCountryCode());
+                preparedStmt.setString(2, user.getPhoneNumbers().get("h").getNumber());
+                preparedStmt.setInt(3, user.getUserId());
+                preparedStmt.executeUpdate();
+                conn.commit();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
     }
 
     @Override
     public void removeContact(int userId) {
+        Optional<User> userOpt = getContactById(userId);
 
+        // remove the contact only if found
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            contacts.remove(user);
+
+        }
     }
 
     @Override
@@ -271,4 +288,5 @@ public class DBUserService implements UserService {
     public void deleteBackupFile(String endFileName) {
 
     }
+
 }

@@ -38,11 +38,6 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public List<User> getContacts(Connection conn) {
-        return null;
-    }
-
-    @Override
     public List<User> getContactsIfCsvModified() {
 
         contacts.clear();
@@ -303,11 +298,11 @@ public class FileUserService implements UserService {
 
     }
 
+    @Override
     public Map<Character, List<User>> makeUserMap(ArrayList<User> userList) {
         return userList.stream()
                 .sorted(Comparator.comparing(User::getLastName).thenComparing(User::getFirstName))
                 .collect(Collectors.groupingBy(user -> user.getLastName().charAt(0), TreeMap::new, Collectors.toList()));
     }
-
 
 }

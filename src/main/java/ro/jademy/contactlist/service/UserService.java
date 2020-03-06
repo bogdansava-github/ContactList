@@ -5,8 +5,6 @@ import ro.jademy.contactlist.model.Company;
 import ro.jademy.contactlist.model.PhoneNumber;
 import ro.jademy.contactlist.model.User;
 
-import java.io.File;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +13,8 @@ import java.util.Optional;
 public interface UserService {
 
     List<User> getContacts();
-    public List<User> getContacts(Connection conn);
 
-    public List<User> getContactsIfCsvModified();
+    List<User> getContactsIfCsvModified();
 
     Optional<User> getContactById(int userId);
 
@@ -36,8 +33,6 @@ public interface UserService {
 
     List<User> search(String query);
 
-    Map<Character, List<User>> makeUserMap(ArrayList<User> userList);
-
     void createBackup();
 
     void viewBackupFilesDetails();
@@ -46,5 +41,5 @@ public interface UserService {
 
     void deleteBackupFile(String endFileName);
 
-
+    Map<Character, List<User>> makeUserMap(ArrayList<User> userList);
 }

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class UserForm {
 
-    public User createNewUser(int id) {
+    public User createNewUser() {
 
         System.out.print("Input first name: ");
         String fName = Main.scanner.nextLine();
@@ -47,9 +47,9 @@ public class UserForm {
         String homePhoneNumber = Main.scanner.nextLine();
 
         Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
-        phoneNumbersNewUser.put("work", new PhoneNumber(workPhonePrefix, workPhoneNumber));
-        phoneNumbersNewUser.put("mobile", new PhoneNumber(mobilePhonePrefix, mobilePhoneNumber));
-        phoneNumbersNewUser.put("home", new PhoneNumber(homePhonePrefix, homePhoneNumber));
+        phoneNumbersNewUser.put("w", new PhoneNumber(workPhonePrefix, workPhoneNumber));
+        phoneNumbersNewUser.put("m", new PhoneNumber(mobilePhonePrefix, mobilePhoneNumber));
+        phoneNumbersNewUser.put("h", new PhoneNumber(homePhonePrefix, homePhoneNumber));
 
         System.out.print("Input the e-mail: ");
         String email = Main.scanner.nextLine();
