@@ -134,11 +134,11 @@ public class Menu {
                     break;
 
                 case 5: //add new contact
-                    /*IntSummaryStatistics statistics = userService.getContacts().stream()
+                    IntSummaryStatistics statistics = userService.getContacts().stream()
                             .mapToInt(User::getUserId)
                             .summaryStatistics();
-                    int id = statistics.getMax() + 1;*/
-                    userService.addContact(userForm.createNewUser());
+                    int id = statistics.getMax() + 1;
+                    userService.addContact(userForm.createNewUser(id));
                     break;
 
                 case 6: //edit contact
@@ -202,7 +202,7 @@ public class Menu {
                             .count();
                     System.out.println(ageCount + " of your contacts have ages between 40 and 50");
 
-                    statistics = userService.getContacts().stream()
+                     statistics = userService.getContacts().stream()
                             .mapToInt(User::getAge)
                             .summaryStatistics();
 

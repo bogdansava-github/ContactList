@@ -16,6 +16,10 @@ public class Company
         this.name = name;
         this.address = address;
     }
+    public Company(){
+
+    }
+
 
     public String getName()
     {

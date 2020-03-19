@@ -152,7 +152,9 @@ public class User implements Comparable<User> {
     }
 
     public void setCompanyName(String companyName) {
-        this.company.setName(companyName);
+        if (this.company==null) {
+            this.company=new Company();
+        }this.company.setName(companyName);
     }
 
     public boolean isFavorite() {

@@ -128,7 +128,7 @@ public class FileUserService implements UserService {
         Map<String, PhoneNumber> phoneNumbersNewUser = new HashMap<>();
 
         try (BufferedReader in = new BufferedReader(new FileReader(contactsFile))) {
-            String line = null;
+            String line;
             while ((line = in.readLine()) != null) {
                 lines.add(line);
             }

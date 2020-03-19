@@ -12,7 +12,7 @@ import java.util.*;
 
 public class UserForm {
 
-    public User createNewUser() {
+    public User createNewUser(int id) {
 
         System.out.print("Input first name: ");
         String fName = Main.scanner.nextLine();
