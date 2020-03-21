@@ -8,7 +8,6 @@ import ro.jademy.contactlist.model.User;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +15,7 @@ public class FileUserService implements UserService {
 
     private File contactsFile;
     private List<User> contacts = new ArrayList<>();
+
 
     public FileUserService(File contactsFile) {
         this.contactsFile = contactsFile;

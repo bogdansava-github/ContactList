@@ -75,7 +75,7 @@ public class Menu {
 
     }
 
-    public void showMenu(UserForm userForm, Connection conn) {
+    public void showMenu(UserForm userForm) {
 
         scanner.useDelimiter("\\n");
         boolean menuExit = false;

@@ -18,7 +18,7 @@ public class CompanyNameComparer implements Comparator<User>
         } else return 1;
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         User user1=new User(1, "Ion", "Popescu", "0723291325");
         User user2=new User(2, "Ana", "Georgescu", "0723291325");
 
@@ -32,5 +32,5 @@ public class CompanyNameComparer implements Comparator<User>
         //user2.setCompanyName("Apple");
         System.out.println(new CompanyNameComparer().compare(user1, user2));
 
-    }
+    }*/
 }
